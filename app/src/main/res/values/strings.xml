@@ -2,4 +2,18 @@
     <string name="app_name">Week Nine - Json Placeholder API</string>
     <string name="first_implementation">First implementation</string>
     <string name="second_implementation">Second implementation</string>
+    <string name="post">dignissimos aperiam dolorem qui eum facilis quibusdam animi sint suscipit qui sint possimus cum quaerat magni maiores excepturi ipsam ut commodi dolor voluptatum modi aut vitae</string>
+    <string name="profile_image">Profile image</string>
+    <string name="kufre_udoh">Kufre Udoh</string>
+    <string name="software_engineer_at_google">Software Engineer at Google</string>
+    <string name="_14h">14h</string>
+    <string name="post_privacy">Post privacy</string>
+    <string name="like_icon">Like icon</string>
+    <string name="_25">25</string>
+    <string name="_6_comments">6 comments</string>
+    <string name="like">Like</string>
+    <string name="comment">Comment</string>
+    <string name="share">Share</string>
+    <string name="chinenye">Chinenye Ikpa</string>
+    <string name="chinenye_bio">Senior Android Engineer At Microsoft</string>
 </resources>
