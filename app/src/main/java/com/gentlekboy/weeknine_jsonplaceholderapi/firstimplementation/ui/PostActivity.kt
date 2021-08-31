@@ -13,7 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityPostBinding
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter.OnclickPostItem
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter.PostAdapter
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.repository.Repository
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModelFactory
@@ -21,12 +24,27 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.
 private lateinit var binding: ActivityPostBinding
 private lateinit var viewModel: MainViewModel
 
-class PostActivity : AppCompatActivity() {
+class PostActivity : AppCompatActivity(), OnclickPostItem {
+    private lateinit var postAdapter: PostAdapter
+    private val linearLayoutManager = LinearLayoutManager(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Set up adapter
+        postAdapter = PostAdapter(this, this)
+
+        //Set up recyclerview
+        binding.postRecyclerview.adapter = postAdapter
+        binding.postRecyclerview.setHasFixedSize(true)
+        binding.postRecyclerview.layoutManager = linearLayoutManager
+
+        displayPostsOnUi()
+    }
+
+    private fun displayPostsOnUi(){
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
 
@@ -34,20 +52,18 @@ class PostActivity : AppCompatActivity() {
         viewModel.fetchPosts()
         viewModel.myResponse.observe(this, {
 
-
             if (it.isSuccessful){
                 val response = it.body()
-                if (response != null){
-                    binding.textView.text = response[0].body
 
-                    Log.d("GKB", "ID: ${response[0].id}")
-                    Log.d("GKB", "USER ID: ${response[0].userId}")
-                    Log.d("GKB", "TITLE: ${response[0].title}")
-                    Log.d("GKB", "BODY: ${response[0].body}")
+                if (response != null){
+                    postAdapter.addPosts(response)
                 }
             }else{
                 Log.d("GKB", "onCreate: ${it.errorBody()}")
             }
         })
+    }
+    override fun clickPostItem(position: Int, id: Int) {
+
     }
 }
