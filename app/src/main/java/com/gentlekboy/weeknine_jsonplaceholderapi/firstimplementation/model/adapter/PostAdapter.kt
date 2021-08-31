@@ -38,6 +38,7 @@ class PostAdapter(private var context: Context, private var onclickPostItem: Onc
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val postPosition = listOfPosts[position]
         val id = postPosition.id
+        val userId = postPosition.userId
 
         holder.postBody.text = postPosition.body
 
@@ -53,7 +54,7 @@ class PostAdapter(private var context: Context, private var onclickPostItem: Onc
 
         //Set onclick listener on item view
         holder.itemView.setOnClickListener {
-            onclickPostItem.clickPostItem(position, id)
+            onclickPostItem.clickPostItem(position, id, userId)
         }
     }
 

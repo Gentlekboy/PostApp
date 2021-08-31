@@ -9,6 +9,7 @@ package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui
 * You should also have a page to create a new post
 * */
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -50,12 +51,13 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.fetchPosts()
-        viewModel.myResponse.observe(this, {
+        viewModel.allPosts.observe(this, {
 
             if (it.isSuccessful){
                 val response = it.body()
 
                 if (response != null){
+
                     postAdapter.addPosts(response)
                 }
             }else{
@@ -63,7 +65,11 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
             }
         })
     }
-    override fun clickPostItem(position: Int, id: Int) {
 
+    override fun clickPostItem(position: Int, id: Int, userId: Int) {
+        val intent = Intent(this, CommentActivity::class.java)
+        intent.putExtra("postId", id)
+        intent.putExtra("userId", userId)
+        startActivity(intent)
     }
 }
