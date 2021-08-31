@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Week Nine - Json Placeholder API</string>
+    <string name="first_implementation">First implementation</string>
+    <string name="second_implementation">Second implementation</string>
 </resources>
