@@ -1,6 +1,6 @@
 package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.api
 
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.Posts
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.Posts
 import retrofit2.Response
 import retrofit2.http.GET
 
