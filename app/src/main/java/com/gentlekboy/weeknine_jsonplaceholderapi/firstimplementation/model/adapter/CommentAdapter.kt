@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.comments.CommentItems
 
-class CommentAdapter(private val context: Context): RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
-    private var listOfComments: ArrayList<CommentItems> = ArrayList()
+class CommentAdapter(private var listOfComments: ArrayList<CommentItems>, private val context: Context): RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+//    private var listOfComments: ArrayList<CommentItems> = ArrayList()
 
     //View Holder
     inner class CommentViewHolder(viewItems: View): RecyclerView.ViewHolder(viewItems){
