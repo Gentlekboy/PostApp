@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.PostItems
 
-class PostAdapter(private var mainListOfPosts: ArrayList<PostItems>, private var context: Context, private var onclickPostItem: OnclickPostItem): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(private var listOfPosts: ArrayList<PostItems>, private var context: Context, private var onclickPostItem: OnclickPostItem): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     //View Holder
     inner class PostViewHolder(viewItems: View): RecyclerView.ViewHolder(viewItems){
@@ -23,8 +23,8 @@ class PostAdapter(private var mainListOfPosts: ArrayList<PostItems>, private var
     //Add posts to list
     fun addPosts(posts: List<PostItems>?) {
         if (posts != null) {
-            mainListOfPosts.clear()
-            mainListOfPosts.addAll(posts)
+            listOfPosts.clear()
+            listOfPosts.addAll(posts)
             notifyDataSetChanged()
         }
     }
@@ -35,7 +35,7 @@ class PostAdapter(private var mainListOfPosts: ArrayList<PostItems>, private var
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val postPosition = mainListOfPosts[position]
+        val postPosition = listOfPosts[position]
         val id = postPosition.id
         val userId = postPosition.userId
 
@@ -53,11 +53,11 @@ class PostAdapter(private var mainListOfPosts: ArrayList<PostItems>, private var
 
         //Set onclick listener on item view
         holder.itemView.setOnClickListener {
-            onclickPostItem.clickPostItem(position, id, userId)
+            onclickPostItem.clickPostItem(position, id)
         }
     }
 
     override fun getItemCount(): Int {
-        return mainListOfPosts.size
+        return listOfPosts.size
     }
 }
