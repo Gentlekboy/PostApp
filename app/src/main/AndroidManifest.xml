@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeekNineJsonPlaceholderAPI">
         <activity
+            android:name=".firstimplementation.ui.AddPostActivity"
+            android:exported="true" />
+        <activity
             android:name=".firstimplementation.ui.CommentActivity"
             android:exported="true" />
         <activity
