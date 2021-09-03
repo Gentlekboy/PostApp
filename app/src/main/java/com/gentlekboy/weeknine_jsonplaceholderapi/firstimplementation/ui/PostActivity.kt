@@ -22,30 +22,39 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityPostBindin
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter.OnclickPostItem
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter.PostAdapter
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.PostItems
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.Posts
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.repository.Repository
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModelFactory
 
 class PostActivity : AppCompatActivity(), OnclickPostItem {
+    //Declare required variables
     private lateinit var binding: ActivityPostBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var postAdapter: PostAdapter
     private val linearLayoutManager = LinearLayoutManager(this)
+    private lateinit var copyOfListOfPosts: ArrayList<PostItems>
+    private lateinit var listOfPosts: ArrayList<PostItems>
+    private lateinit var response: Posts
+
+    //Instantiate variables
     private val repository = Repository()
     private val viewModelFactory = MainViewModelFactory(repository)
-    private lateinit var temporaryListOfPosts: ArrayList<PostItems>
-    private lateinit var mainListOfPosts: ArrayList<PostItems>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        temporaryListOfPosts = arrayListOf()
-        mainListOfPosts = arrayListOf()
+        /*
+        listOfPosts holds items in the adapter
+        copyOfListOfPosts contains all items in the adapter and is used to filter posts
+         */
+        copyOfListOfPosts = arrayListOf()
+        listOfPosts = arrayListOf()
 
         //Set up adapter
-        postAdapter = PostAdapter(mainListOfPosts, this, this)
+        postAdapter = PostAdapter(listOfPosts, this, this)
 
         //Set up recyclerview
         binding.postRecyclerview.adapter = postAdapter
@@ -57,75 +66,65 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         }
 
         displayPostsOnUi()
+        filterPosts()
     }
 
-    private fun displayPostsOnUi(){
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        viewModel.fetchPosts()
-        viewModel.allPosts.observe(this, {
-
-            if (it.isSuccessful){
-                val response = it.body()
-
-                if (response != null){
-                    postAdapter.addPosts(response)
-
-                    temporaryListOfPosts.addAll(mainListOfPosts)
-                }
-            }else{
-                Log.d("GKB", "onCreate: ${it.errorBody()}")
-            }
-        })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_items, menu)
-        val item = menu?.findItem(R.id.search_action)
-        val searchview = item?.actionView as SearchView
-
-        searchview.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    //This function filters posts based on user's query in the search view
+    private fun filterPosts(){
+        binding.searchView.setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                TODO("Not yet implemented")
+                return true
             }
 
+            //Filters posts as user types in the search view
             override fun onQueryTextChange(newText: String?): Boolean {
-                mainListOfPosts.clear()
-                Log.d("GKB", "SHOULD BE EMPTY: $mainListOfPosts")
-
+                listOfPosts.clear()
                 val searchText = newText?.lowercase()?.trim()
 
                 if (searchText != null) {
                     if (searchText.isNotEmpty()){
-                        temporaryListOfPosts.forEach {
+                        copyOfListOfPosts.forEach {
                             if (it.body.lowercase().contains(searchText)){
-                                mainListOfPosts.add(it)
+                                listOfPosts.add(it)
                             }
                         }
 
-                        Log.d("GKB", "SHOULD CONTAIN SOME DATA: $mainListOfPosts")
-
                         postAdapter.notifyDataSetChanged()
                     }else{
-                        mainListOfPosts.clear()
-
-                        Log.d("GKB", "ELSE -> SHOULD BE EMPTY: $mainListOfPosts")
-                        mainListOfPosts.addAll(temporaryListOfPosts)
-
-                        Log.d("GKB", "SHOULD CONTAIN ALL DATA: $mainListOfPosts")
+                        listOfPosts.clear()
+                        listOfPosts.addAll(copyOfListOfPosts)
                         postAdapter.notifyDataSetChanged()
                     }
                 }
                 return true
             }
         })
-
-        return super.onCreateOptionsMenu(menu)
     }
 
-    override fun clickPostItem(position: Int, id: Int, userId: Int) {
+    //This function fetches posts and displays them on the UI
+    private fun displayPostsOnUi(){
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel.fetchPosts()
+        viewModel.allPosts.observe(this, {
+
+            if (it.isSuccessful){
+                response = it.body()!!
+
+                postAdapter.addPosts(response)
+
+                copyOfListOfPosts.addAll(listOfPosts)
+            }else{
+                Log.d("GKB", "onCreate: ${it.errorBody()}")
+            }
+        })
+    }
+
+    //This function handles clicking items on the recyclerview and passing data to the next activity
+    override fun clickPostItem(position: Int, id: Int) {
+        val postBody = response[position].body
         val intent = Intent(this, CommentActivity::class.java)
         intent.putExtra("postId", id)
-        intent.putExtra("userId", userId)
+        intent.putExtra("postBody", postBody)
         startActivity(intent)
     }
 }
