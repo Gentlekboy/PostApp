@@ -137,11 +137,11 @@ class CommentActivity : AppCompatActivity() {
 
     //This function adds new comment to the UI
     private fun addNewComment(){
-        numberOfComments++
-
         val newInputtedComment = binding.addComment.text.toString().trim()
 
         if (newInputtedComment.isNotEmpty()){
+            numberOfComments++
+
             val commentItems = CommentItems(newInputtedComment, "kufreabasi.udoh@decagon.dev", 11, "Kufre Udoh", numberOfComments)
 
             listOfComments.add(commentItems)
