@@ -9,15 +9,15 @@ package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui
 * You should also have a page to create a new post
 * */
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityPostBinding
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter.OnclickPostItem
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter.PostAdapter
@@ -32,6 +32,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     private lateinit var binding: ActivityPostBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var postAdapter: PostAdapter
+    private lateinit var inputMethodManager: InputMethodManager
     private val linearLayoutManager = LinearLayoutManager(this)
     private lateinit var copyOfListOfPosts: ArrayList<PostItems>
     private lateinit var listOfPosts: ArrayList<PostItems>
@@ -45,6 +46,8 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         super.onCreate(savedInstanceState)
         binding = ActivityPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         /*
         listOfPosts holds items in the adapter
@@ -61,8 +64,8 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         binding.postRecyclerview.setHasFixedSize(true)
         binding.postRecyclerview.layoutManager = linearLayoutManager
 
-        binding.makePost.setOnClickListener {
-            startActivity(Intent(this, AddPostActivity::class.java))
+        binding.addPostButton.setOnClickListener {
+            addNewPost()
         }
 
         displayPostsOnUi()
@@ -71,7 +74,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
 
     //This function filters posts based on user's query in the search view
     private fun filterPosts(){
-        binding.searchView.setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -97,6 +100,42 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
                     }
                 }
                 return true
+            }
+        })
+    }
+
+    private fun addNewPost(){
+        val postBody = binding.addPostEditText.text.toString().trim()
+
+        if (postBody.isNotEmpty()){
+            var id = 101
+            val postItems = PostItems(postBody, id, "Kufre's Post", 11)
+
+            id++
+
+            listOfPosts.add(postItems)
+            postAdapter.notifyItemInserted(listOfPosts.size-1)
+
+            binding.addPostEditText.text = null
+            binding.addPostEditText.clearFocus()
+
+            //Hide keyboard after clicking the comment button
+            inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
+
+            sendPostToServer(id, postBody)
+        }
+    }
+
+    private fun sendPostToServer(id: Int,  body: String){
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel.makeAPostToApi(11, id, "Kufre's Post", body)
+        viewModel.pushPost2.observe(this, {
+            if (it.isSuccessful){
+                Log.d("GKB", "sendPostToServer: ${it.body()}")
+                Log.d("GKB", "sendPostToServer: ${it.code()}")
+            }else{
+                Log.d("GKB", "sendPostToServer: ${it.code()}")
+                Log.d("GKB", "sendPostToServer: ${it.errorBody()}")
             }
         })
     }
