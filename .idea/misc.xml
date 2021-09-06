@@ -7,13 +7,15 @@
         <entry key="app/src/main/res/drawable/comment_background.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/drawable/comment_edittext_background.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/drawable/post_button_background.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/drawable/post_edit_text_container.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/top_border.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/activity_add_post.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/layout/activity_comment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19739583333333333" />
-        <entry key="app/src/main/res/layout/activity_post.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/activity_post.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/add_post_alert_dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/comments_view_holder.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/posts_view_holder.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/posts_view_holder.xml" value="0.25" />
         <entry key="app/src/main/res/menu/menu_items.xml" value="0.21197916666666666" />
       </map>
     </option>
