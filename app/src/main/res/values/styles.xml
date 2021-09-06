@@ -6,7 +6,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:background">@color/white</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">#595959</item>
+        <item name="android:textColor">@color/gray</item>
     </style>
 
     <style name="PostBodyText">
@@ -42,5 +42,12 @@
         <item name="android:layout_height">15dp</item>
         <item name="android:contentDescription">@string/like_icon</item>
         <item name="android:src">@drawable/ic_baseline_thumb_up_24</item>
+    </style>
+
+    <style name="LinearLayoutButtons">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:background">@drawable/linear_layout_buttons_border</item>
+
     </style>
 </resources>

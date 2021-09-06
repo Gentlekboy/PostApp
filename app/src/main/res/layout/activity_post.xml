@@ -12,9 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/dosis_extrabold"
         android:text="@string/postapp"
         android:textSize="24sp"
-        android:textStyle="bold"
+        android:textColor="@color/blue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,6 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
+                    android:contentDescription="@string/my_profile_image"
                     app:srcCompat="@drawable/my_image" />
             </androidx.cardview.widget.CardView>
 
@@ -82,7 +84,7 @@
 
                 <EditText
                     android:id="@+id/add_post_edit_text"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
@@ -113,10 +115,8 @@
 
             <LinearLayout
                 android:id="@+id/linearLayout2"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
+                style="@style/LinearLayoutButtons"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/linear_layout_buttons_border"
                 android:paddingVertical="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,9 +128,10 @@
                     android:text="@string/live"
                     android:textColor="@color/black"
                     app:backgroundTint="@color/white"
+                    android:fontFamily="@font/dosis_medium"
                     app:icon="@drawable/ic_baseline_videocam_24"
                     app:iconGravity="textStart"
-                    app:iconTint="#595959" />
+                    app:iconTint="@color/gray" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/post_photo_button"
@@ -138,9 +139,10 @@
                     android:text="@string/photo"
                     android:textColor="@color/black"
                     app:backgroundTint="@color/white"
+                    android:fontFamily="@font/dosis_medium"
                     app:icon="@drawable/ic_baseline_add_photo_alternate_24"
                     app:iconGravity="textStart"
-                    app:iconTint="#595959" />
+                    app:iconTint="@color/gray" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/create_room_button"
@@ -148,16 +150,17 @@
                     android:text="@string/room"
                     android:textColor="@color/black"
                     app:backgroundTint="@color/white"
+                    android:fontFamily="@font/dosis_medium"
                     app:icon="@drawable/ic_baseline_video_call_24"
                     app:iconGravity="textStart"
-                    app:iconTint="#595959" />
+                    app:iconTint="@color/gray" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/post_recyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="#EDEDED"
+                android:background="@color/dark_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
