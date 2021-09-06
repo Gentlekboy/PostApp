@@ -25,4 +25,22 @@
     <string name="room">Room</string>
     <string name="make_post">Post</string>
     <string name="_5">5</string>
+    <string name="peter_akam">Peter Akam</string>
+    <string name="peter_bio">CEO at Facebook</string>
+    <string name="benjamin_obetta">Benjamin Obetta</string>
+    <string name="benjamin_bio">JavaScript Developer</string>
+    <string name="anthony_idoko">Anthony Idoko</string>
+    <string name="anthony_bio">Android Developer at Pako.com</string>
+    <string name="johnson_oyesina">Johnson Oyesina</string>
+    <string name="johnson_bio">DevOps Engineer at LinkedIn</string>
+    <string name="emmanuel_oruminighen">Emmanuel Oruminighen</string>
+    <string name="emmanuel_bio">Lead Software Engineer at Google</string>
+    <string name="john_doe">John Doe</string>
+    <string name="john_bio">AWS Engineer at Microsoft</string>
+    <string name="jennifer_santos">Jennifer Santos</string>
+    <string name="jennifer_bio">Junior Web Developer at Tesla</string>
+    <string name="joe_davids">Joe Davids</string>
+    <string name="john_davids_bio">Software Developer | React Native</string>
+    <string name="cassidy_banks">Cassidy Banks</string>
+    <string name="cassidey_bio">UI/UX Engineer at Flutterwave</string>
 </resources>

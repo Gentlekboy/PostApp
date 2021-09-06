@@ -17,20 +17,19 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModelFactory
 import kotlin.properties.Delegates
 
-private lateinit var binding: ActivityCommentBinding
-private lateinit var viewModel: MainViewModel
-
 class CommentActivity : AppCompatActivity() {
     //Declare variables to be initialized
     private lateinit var commentAdapter: CommentAdapter
+    private lateinit var binding: ActivityCommentBinding
+    private lateinit var viewModel: MainViewModel
     private val linearLayoutManager = LinearLayoutManager(this)
     private lateinit var inputMethodManager: InputMethodManager
     private lateinit var listOfComments: ArrayList<CommentItems>
-    private lateinit var postId: String
-    private var userId by Delegates.notNull<Int>()
-    private lateinit var postBody: String
     private var numberOfComments by Delegates.notNull<Int>()
     private var numberOfLikes by Delegates.notNull<Int>()
+    private var userId by Delegates.notNull<Int>()
+    private lateinit var postId: String
+    private lateinit var postBody: String
 
     //Initialize repository and main view model factory
     private val repository = Repository()
@@ -80,8 +79,8 @@ class CommentActivity : AppCompatActivity() {
             if (compoundButton.isChecked){
                 numberOfLikes++
                 binding.numberOfLikes.text = numberOfLikes.toString()
-                binding.likeIcon.setColorFilter(resources.getColor(R.color.teal_200))
-                binding.likeButton.setTextColor(resources.getColor(R.color.teal_200))
+                binding.likeIcon.setColorFilter(resources.getColor(R.color.blue))
+                binding.likeButton.setTextColor(resources.getColor(R.color.blue))
             }else{
                 numberOfLikes--
                 binding.numberOfLikes.text = numberOfLikes.toString()
@@ -129,33 +128,33 @@ class CommentActivity : AppCompatActivity() {
         when(userId){
             1 -> {
                 binding.profileImage.setImageResource(R.drawable.user_1)
-                binding.profileName.text = "Peter Akam"
-                binding.profileBio.text = "CEO at Facebook"
+                binding.profileName.text = getString(R.string.peter_akam)
+                binding.profileBio.text = getString(R.string.peter_bio)
             }
             2 -> {
                 binding.profileImage.setImageResource(R.drawable.user_2)
-                binding.profileName.text = "Benjamin Obetta"
-                binding.profileBio.text = "JavaScript Developer"
+                binding.profileName.text = getString(R.string.benjamin_obetta)
+                binding.profileBio.text = getString(R.string.benjamin_bio)
             }
             3 -> {
                 binding.profileImage.setImageResource(R.drawable.user_3)
-                binding.profileName.text = "Anthony Idoko"
-                binding.profileBio.text = "Android Developer at Pako.com"
+                binding.profileName.text = getString(R.string.anthony_idoko)
+                binding.profileBio.text = getString(R.string.anthony_bio)
             }
             4 -> {
                 binding.profileImage.setImageResource(R.drawable.user_4)
-                binding.profileName.text = "Johnson Oyesina"
-                binding.profileBio.text = "DevOps Engineer at LinkedIn"
+                binding.profileName.text = getString(R.string.johnson_oyesina)
+                binding.profileBio.text = getString(R.string.johnson_bio)
             }
             5 -> {
                 binding.profileImage.setImageResource(R.drawable.user_5)
-                binding.profileName.text = "Emmanuel Oruminighen"
-                binding.profileBio.text = "Lead Software Engineer at Google"
+                binding.profileName.text = getString(R.string.emmanuel_oruminighen)
+                binding.profileBio.text = getString(R.string.emmanuel_bio)
             }
             6 -> {
                 binding.profileImage.setImageResource(R.drawable.user_6)
-                binding.profileName.text = "John Doe"
-                binding.profileBio.text = "AWS Engineer at Microsoft"
+                binding.profileName.text = getString(R.string.john_doe)
+                binding.profileBio.text = getString(R.string.john_bio)
             }
             7 -> {
                 binding.profileImage.setImageResource(R.drawable.user_7)
@@ -164,18 +163,18 @@ class CommentActivity : AppCompatActivity() {
             }
             8 -> {
                 binding.profileImage.setImageResource(R.drawable.user_8)
-                binding.profileName.text = "Jennifer Santos"
-                binding.profileBio.text = "Junior Web Developer at Tesla"
+                binding.profileName.text = getString(R.string.jennifer_santos)
+                binding.profileBio.text = getString(R.string.jennifer_bio)
             }
             9 -> {
                 binding.profileImage.setImageResource(R.drawable.user_9)
-                binding.profileName.text = "Joe Davids"
-                binding.profileBio.text = "Software Developer | React Native"
+                binding.profileName.text = getString(R.string.joe_davids)
+                binding.profileBio.text = getString(R.string.john_davids_bio)
             }
             10 -> {
                 binding.profileImage.setImageResource(R.drawable.user_10)
-                binding.profileName.text = "Cassidy Banks"
-                binding.profileBio.text = "UI/UX Engineer at Flutterwave"
+                binding.profileName.text = getString(R.string.cassidy_banks)
+                binding.profileBio.text = getString(R.string.cassidey_bio)
             }
             else -> {
                 binding.profileImage.setImageResource(R.drawable.my_image)
