@@ -41,7 +41,7 @@ class CommentAdapter(private var listOfComments: ArrayList<CommentItems>, privat
         holder.comentBody.text = commentPosition.body
 
         if (commentPosition.id % 2 == 0){
-            holder.commentImage.setImageResource(R.drawable.chinenye)
+            holder.commentImage.setImageResource(R.drawable.user_7)
             holder.commentName.text = context.getString(R.string.chinenye)
             holder.commentBio.text = context.getString(R.string.chinenye_bio)
         }else{
