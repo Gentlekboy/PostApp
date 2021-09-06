@@ -19,4 +19,8 @@
     <string name="what_s_on_your_mind">What\'s on your mind?</string>
     <string name="postapp">PostApp</string>
     <string name="filter">Filter</string>
+    <string name="what_do_you_want_to_talk_about">What do you want to talk about?</string>
+    <string name="live">Live</string>
+    <string name="photo">Photo</string>
+    <string name="room">Room</string>
 </resources>
