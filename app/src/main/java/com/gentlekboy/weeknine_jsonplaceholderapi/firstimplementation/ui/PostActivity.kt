@@ -52,13 +52,10 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
 
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        /*
-        listOfPosts holds items in the adapter
-        copyOfListOfPosts contains all items in the adapter and is used to filter posts
-         */
-        copyOfListOfPosts = mutableListOf()
-        listOfPosts = mutableListOf()
-        reversedListOfPosts = listOfPosts.asReversed()
+        //Initialize lists
+        copyOfListOfPosts = mutableListOf() //copyOfListOfPosts contains all items in the adapter and is used to filter posts
+        listOfPosts = mutableListOf() //listOfPosts holds items in the adapter
+        reversedListOfPosts = listOfPosts.asReversed() //reversedListOfPosts reverses the list such that a new post appears on top
 
         //Set up adapter
         postAdapter = PostAdapter(reversedListOfPosts, this, this)
@@ -79,6 +76,53 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
 
         fetchAndDisplayPostsOnUi()
         filterPosts()
+    }
+
+    //This function fetches posts and displays them on the UI
+    private fun fetchAndDisplayPostsOnUi(){
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel.fetchPosts()
+        viewModel.allPosts.observe(this, {
+
+            if (it.isSuccessful){
+                response = it.body()!!
+                postAdapter.addPosts(response)
+                copyOfListOfPosts.addAll(listOfPosts)
+            }else{
+                Log.d("GKB", "onCreate: ${it.errorBody()}")
+            }
+        })
+    }
+
+    //Makes a post request and adds new post to the recycler view
+    private fun sendPostToServer(){
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        newPostBody = binding.addPostEditText.text.toString().trim()
+        val id = listOfPosts.size + 1
+
+        if (newPostBody.isNotEmpty()){
+            viewModel.makeAPostToApi(11, id, "Kufre's Post", newPostBody)
+            viewModel.pushPost2.observe(this, {
+
+                if (it.isSuccessful){
+                    val postItems = PostItems(newPostBody, id, "Kufre's Post", 11)
+                    listOfPosts.add(postItems)
+                    copyOfListOfPosts.add(postItems)
+                    postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
+
+                    binding.addPostEditText.text = null
+                    binding.addPostEditText.clearFocus()
+
+                    //Hide keyboard after clicking the comment button
+                    inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
+
+                    Log.d("GKB", "sendPostToServer: ${it.code()}")
+                }else{
+                    Log.d("GKB", "sendPostToServer: ${it.code()}")
+                    Log.d("GKB", "sendPostToServer: ${it.errorBody()}")
+                }
+            })
+        }
     }
 
     //This function filters posts based on user's query in the search view
@@ -110,52 +154,6 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
                     }
                 }
                 return true
-            }
-        })
-    }
-
-    private fun sendPostToServer(){
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        newPostBody = binding.addPostEditText.text.toString().trim()
-        val id = listOfPosts.size + 1
-
-        if (newPostBody.isNotEmpty()){
-            viewModel.makeAPostToApi(11, id, "Kufre's Post", newPostBody)
-            viewModel.pushPost2.observe(this, {
-
-                if (it.isSuccessful){
-                    val postItems = PostItems(newPostBody, id, "Kufre's Post", 11)
-                    listOfPosts.add(postItems)
-                    copyOfListOfPosts.add(postItems)
-                    postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
-
-                    binding.addPostEditText.text = null
-                    binding.addPostEditText.clearFocus()
-
-                    //Hide keyboard after clicking the comment button
-                    inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
-
-                    Log.d("GKB", "sendPostToServer: ${it.code()}")
-                }else{
-                    Log.d("GKB", "sendPostToServer: ${it.code()}")
-                    Log.d("GKB", "sendPostToServer: ${it.errorBody()}")
-                }
-            })
-        }
-    }
-
-    //This function fetches posts and displays them on the UI
-    private fun fetchAndDisplayPostsOnUi(){
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        viewModel.fetchPosts()
-        viewModel.allPosts.observe(this, {
-
-            if (it.isSuccessful){
-                response = it.body()!!
-                postAdapter.addPosts(response)
-                copyOfListOfPosts.addAll(listOfPosts)
-            }else{
-                Log.d("GKB", "onCreate: ${it.errorBody()}")
             }
         })
     }
