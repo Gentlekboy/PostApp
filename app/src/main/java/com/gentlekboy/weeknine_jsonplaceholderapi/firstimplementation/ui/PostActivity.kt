@@ -34,9 +34,11 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     private lateinit var postAdapter: PostAdapter
     private lateinit var inputMethodManager: InputMethodManager
     private val linearLayoutManager = LinearLayoutManager(this)
-    private lateinit var copyOfListOfPosts: ArrayList<PostItems>
-    private lateinit var listOfPosts: ArrayList<PostItems>
+    private lateinit var copyOfListOfPosts: MutableList<PostItems>
+    private lateinit var reversedListOfPosts: MutableList<PostItems>
+    private lateinit var listOfPosts: MutableList<PostItems>
     private lateinit var response: Posts
+    private lateinit var newPostBody: String
 
     //Instantiate variables
     private val repository = Repository()
@@ -53,11 +55,12 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         listOfPosts holds items in the adapter
         copyOfListOfPosts contains all items in the adapter and is used to filter posts
          */
-        copyOfListOfPosts = arrayListOf()
-        listOfPosts = arrayListOf()
+        copyOfListOfPosts = mutableListOf()
+        listOfPosts = mutableListOf()
+        reversedListOfPosts = listOfPosts.asReversed()
 
         //Set up adapter
-        postAdapter = PostAdapter(listOfPosts, this, this)
+        postAdapter = PostAdapter(reversedListOfPosts, this, this)
 
         //Set up recyclerview
         binding.postRecyclerview.adapter = postAdapter
@@ -68,6 +71,11 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
             addNewPost()
         }
 
+        binding.editTextContainer.setOnClickListener {
+            binding.addPostEditText.requestFocus()
+            inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
+        }
+
         displayPostsOnUi()
         filterPosts()
     }
@@ -76,6 +84,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     private fun filterPosts(){
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                inputMethodManager.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
                 return true
             }
 
@@ -105,16 +114,17 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     }
 
     private fun addNewPost(){
-        val postBody = binding.addPostEditText.text.toString().trim()
+        newPostBody = binding.addPostEditText.text.toString().trim()
 
-        if (postBody.isNotEmpty()){
+        if (newPostBody.isNotEmpty()){
             var id = 101
-            val postItems = PostItems(postBody, id, "Kufre's Post", 11)
+            val postItems = PostItems(newPostBody, id, "Kufre's Post", 11)
 
             id++
 
             listOfPosts.add(postItems)
-            postAdapter.notifyItemInserted(listOfPosts.size-1)
+            copyOfListOfPosts.add(postItems)
+            postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
 
             binding.addPostEditText.text = null
             binding.addPostEditText.clearFocus()
@@ -122,7 +132,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
             //Hide keyboard after clicking the comment button
             inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
 
-            sendPostToServer(id, postBody)
+            sendPostToServer(id, newPostBody)
         }
     }
 
@@ -130,6 +140,9 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.makeAPostToApi(11, id, "Kufre's Post", body)
         viewModel.pushPost2.observe(this, {
+
+            Log.d("GKB", "sendPostToServer: ${viewModel.pushPost2}")
+
             if (it.isSuccessful){
                 Log.d("GKB", "sendPostToServer: ${it.body()}")
                 Log.d("GKB", "sendPostToServer: ${it.code()}")
@@ -148,9 +161,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
 
             if (it.isSuccessful){
                 response = it.body()!!
-
                 postAdapter.addPosts(response)
-
                 copyOfListOfPosts.addAll(listOfPosts)
             }else{
                 Log.d("GKB", "onCreate: ${it.errorBody()}")
@@ -159,11 +170,20 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     }
 
     //This function handles clicking items on the recyclerview and passing data to the next activity
-    override fun clickPostItem(position: Int, id: Int) {
-        val postBody = response[position].body
-        val intent = Intent(this, CommentActivity::class.java)
-        intent.putExtra("postId", id)
-        intent.putExtra("postBody", postBody)
-        startActivity(intent)
+    override fun clickPostItem(position: Int, id: Int, userId: Int) {
+        if (listOfPosts.size > 100){
+            val intent = Intent(this, CommentActivity::class.java)
+            intent.putExtra("postId", id)
+            intent.putExtra("userId", userId)
+            intent.putExtra("postBody", newPostBody)
+            startActivity(intent)
+        }else{
+            val postBody = response[position].body
+            val intent = Intent(this, CommentActivity::class.java)
+            intent.putExtra("postId", id)
+            intent.putExtra("userId", userId)
+            intent.putExtra("postBody", postBody)
+            startActivity(intent)
+        }
     }
 }

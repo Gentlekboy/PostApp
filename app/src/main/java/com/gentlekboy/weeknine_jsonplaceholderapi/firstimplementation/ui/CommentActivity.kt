@@ -27,6 +27,7 @@ class CommentActivity : AppCompatActivity() {
     private lateinit var inputMethodManager: InputMethodManager
     private lateinit var listOfComments: ArrayList<CommentItems>
     private lateinit var postId: String
+    private var userId by Delegates.notNull<Int>()
     private lateinit var postBody: String
     private var numberOfComments by Delegates.notNull<Int>()
     private var numberOfLikes by Delegates.notNull<Int>()
@@ -42,6 +43,7 @@ class CommentActivity : AppCompatActivity() {
 
         //Get data from post activity
         postId = intent.getIntExtra("postId", 1).toString()
+        userId = intent.getIntExtra("userId", 1)
         postBody = intent.getStringExtra("postBody").toString()
 
         //Initialize required variables
@@ -124,14 +126,57 @@ class CommentActivity : AppCompatActivity() {
     private fun populatePostDetails(){
         binding.postBody.text = postBody
 
-        if (postId.toInt() % 2 == 0 || postId.toInt() % 7 == 0){
-            binding.profileImage.setImageResource(R.drawable.chinenye)
-            binding.profileName.text = getString(R.string.chinenye)
-            binding.profileBio.text = getString(R.string.chinenye_bio)
-        }else{
-            binding.profileImage.setImageResource(R.drawable.my_image)
-            binding.profileName.text = getString(R.string.kufre_udoh)
-            binding.profileBio.text = getString(R.string.software_engineer_at_google)
+        when(userId){
+            1 -> {
+                binding.profileImage.setImageResource(R.drawable.user_1)
+                binding.profileName.text = "Peter Akam"
+                binding.profileBio.text = "CEO at Facebook"
+            }
+            2 -> {
+                binding.profileImage.setImageResource(R.drawable.user_2)
+                binding.profileName.text = "Benjamin Obetta"
+                binding.profileBio.text = "JavaScript Developer"
+            }
+            3 -> {
+                binding.profileImage.setImageResource(R.drawable.user_3)
+                binding.profileName.text = "Anthony Idoko"
+                binding.profileBio.text = "Android Developer at Pako.com"
+            }
+            4 -> {
+                binding.profileImage.setImageResource(R.drawable.user_4)
+                binding.profileName.text = "Johnson Oyesina"
+                binding.profileBio.text = "DevOps Engineer at LinkedIn"
+            }
+            5 -> {
+                binding.profileImage.setImageResource(R.drawable.user_5)
+                binding.profileName.text = "Emmanuel Oruminighen"
+                binding.profileBio.text = "Lead Software Engineer at Google"
+            }
+            6 -> {
+                binding.profileImage.setImageResource(R.drawable.user_6)
+                binding.profileName.text = "John Doe"
+                binding.profileBio.text = "AWS Engineer at Microsoft"
+            }
+            7 -> {
+                binding.profileImage.setImageResource(R.drawable.user_7)
+                binding.profileName.text = getString(R.string.chinenye)
+                binding.profileBio.text = getString(R.string.chinenye_bio)
+            }
+            8 -> {
+                binding.profileImage.setImageResource(R.drawable.user_8)
+                binding.profileName.text = "Jennifer Santos"
+                binding.profileBio.text = "Junior Web Developer at Tesla"
+            }
+            9 -> {
+                binding.profileImage.setImageResource(R.drawable.user_9)
+                binding.profileName.text = "Joe Davids"
+                binding.profileBio.text = "Software Developer | React Native"
+            }
+            else -> {
+                binding.profileImage.setImageResource(R.drawable.user_10)
+                binding.profileName.text = "Cassidy Banks"
+                binding.profileBio.text = "UI/UX Engineer at Flutterwave"
+            }
         }
     }
 
