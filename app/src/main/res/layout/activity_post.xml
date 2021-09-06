@@ -20,10 +20,15 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
+        style="@style/Widget.AppCompat.SearchView.ActionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        app:iconifiedByDefault="false"
+        android:focusable="true"
+        android:background="@drawable/post_edit_text_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/app_name"
         app:layout_constraintTop_toBottomOf="@+id/app_name"
@@ -32,6 +37,10 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:scrollbars="vertical"
+        android:scrollbarSize="3dp"
+        android:fadeScrollbars="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -46,6 +55,7 @@
                 android:id="@+id/profile_image_card"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="30dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +74,7 @@
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="12dp"
                 android:background="@drawable/post_edit_text_container"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/profile_image_card"
@@ -75,28 +85,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:autofillHints="none"
                     android:background="@drawable/comment_edittext_background"
                     android:hint="@string/what_do_you_want_to_talk_about"
                     android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/add_post_button"
-                style="@style/Button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Post"
+                android:layout_height="35dp"
+                android:background="@drawable/post_button_border"
+                android:text="@string/make_post"
                 android:textColor="@color/black"
-                app:backgroundTint="@color/white"
-                app:iconTint="@color/black"
                 app:layout_constraintEnd_toEndOf="@+id/edit_text_container"
                 app:layout_constraintStart_toStartOf="@+id/edit_text_container"
                 app:layout_constraintTop_toBottomOf="@+id/edit_text_container" />
@@ -104,10 +114,12 @@
             <LinearLayout
                 android:id="@+id/linearLayout2"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                app:layout_constraintEnd_toEndOf="@+id/edit_text_container"
-                app:layout_constraintStart_toStartOf="@+id/profile_image_card"
+                android:layout_height="45dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/linear_layout_buttons_border"
+                android:paddingVertical="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/add_post_button">
 
                 <com.google.android.material.button.MaterialButton
@@ -118,7 +130,7 @@
                     app:backgroundTint="@color/white"
                     app:icon="@drawable/ic_baseline_videocam_24"
                     app:iconGravity="textStart"
-                    app:iconTint="@color/black" />
+                    app:iconTint="#595959" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/post_photo_button"
@@ -128,7 +140,7 @@
                     app:backgroundTint="@color/white"
                     app:icon="@drawable/ic_baseline_add_photo_alternate_24"
                     app:iconGravity="textStart"
-                    app:iconTint="@color/black" />
+                    app:iconTint="#595959" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/create_room_button"
@@ -138,14 +150,13 @@
                     app:backgroundTint="@color/white"
                     app:icon="@drawable/ic_baseline_video_call_24"
                     app:iconGravity="textStart"
-                    app:iconTint="@color/black" />
+                    app:iconTint="#595959" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/post_recyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:background="#EDEDED"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

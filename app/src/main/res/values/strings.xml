@@ -23,4 +23,6 @@
     <string name="live">Live</string>
     <string name="photo">Photo</string>
     <string name="room">Room</string>
+    <string name="make_post">Post</string>
+    <string name="_5">5</string>
 </resources>
