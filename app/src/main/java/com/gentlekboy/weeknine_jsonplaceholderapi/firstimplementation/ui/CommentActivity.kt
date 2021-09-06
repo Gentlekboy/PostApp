@@ -172,10 +172,15 @@ class CommentActivity : AppCompatActivity() {
                 binding.profileName.text = "Joe Davids"
                 binding.profileBio.text = "Software Developer | React Native"
             }
-            else -> {
+            10 -> {
                 binding.profileImage.setImageResource(R.drawable.user_10)
                 binding.profileName.text = "Cassidy Banks"
                 binding.profileBio.text = "UI/UX Engineer at Flutterwave"
+            }
+            else -> {
+                binding.profileImage.setImageResource(R.drawable.my_image)
+                binding.profileName.text = getString(R.string.kufre_udoh)
+                binding.profileBio.text = getString(R.string.software_engineer_at_google)
             }
         }
     }

@@ -1,5 +1,5 @@
 package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter
 
 interface OnclickPostItem {
-    fun clickPostItem(position: Int, id: Int, userId: Int)
+    fun navigateToCommentsActivity(position: Int, id: Int, userId: Int)
 }

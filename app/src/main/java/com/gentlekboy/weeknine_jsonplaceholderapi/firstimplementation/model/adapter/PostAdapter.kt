@@ -87,58 +87,21 @@ class PostAdapter(private var listOfPosts: MutableList<PostItems>, private var c
                 holder.profileName.text = "Joe Davids"
                 holder.bio.text = "Software Developer | React Native"
             }
-            else -> {
+            10 -> {
                 holder.profileImage.setImageResource(R.drawable.user_10)
                 holder.profileName.text = "Cassidy Banks"
                 holder.bio.text = "UI/UX Engineer at Flutterwave"
             }
+            else -> {
+                holder.profileImage.setImageResource(R.drawable.my_image)
+                holder.profileName.text = context.getString(R.string.kufre_udoh)
+                holder.bio.text = context.getString(R.string.software_engineer_at_google)
+            }
         }
-
-//        if (userId == 1){
-//            holder.profileImage.setImageResource(R.drawable.user_1)
-//            holder.profileName.text = "Peter Akam"
-//            holder.bio.text = "CEO at Facebook"
-//        }else if (userId == 2){
-//            holder.profileImage.setImageResource(R.drawable.user_2)
-//            holder.profileName.text = "Benjamin Obetta"
-//            holder.bio.text = "JavaScript Developer"
-//        }else if (userId == 3){
-//            holder.profileImage.setImageResource(R.drawable.user_3)
-//            holder.profileName.text = "Anthony Idoko"
-//            holder.bio.text = "Android Developer at Pako.com"
-//        }else if (userId == 4){
-//            holder.profileImage.setImageResource(R.drawable.user_4)
-//            holder.profileName.text = "Johnson Oyesina"
-//            holder.bio.text = "DevOps Engineer at LinkedIn"
-//        }else if (userId == 5){
-//            holder.profileImage.setImageResource(R.drawable.user_5)
-//            holder.profileName.text = "Emmanuel Oruminighen"
-//            holder.bio.text = "Lead Software Engineer at Google"
-//        }else if (userId == 6){
-//            holder.profileImage.setImageResource(R.drawable.user_6)
-//            holder.profileName.text = "John Doe"
-//            holder.bio.text = "AWS Engineer at Microsoft"
-//        }else if (userId == 7){
-//            holder.profileImage.setImageResource(R.drawable.user_7)
-//            holder.profileName.text = context.getString(R.string.chinenye)
-//            holder.bio.text = context.getString(R.string.chinenye_bio)
-//        }else if (userId == 8){
-//            holder.profileImage.setImageResource(R.drawable.user_8)
-//            holder.profileName.text = "Jennifer Santos"
-//            holder.bio.text = "Junior Web Developer at Tesla"
-//        }else if (userId == 9){
-//            holder.profileImage.setImageResource(R.drawable.user_9)
-//            holder.profileName.text = "Joe Davids"
-//            holder.bio.text = "Software Developer | React Native"
-//        }else {
-//            holder.profileImage.setImageResource(R.drawable.user_10)
-//            holder.profileName.text = "Cassidy Banks"
-//            holder.bio.text = "UI/UX Engineer at Flutterwave"
-//        }
 
         //Set onclick listener on item view
         holder.itemView.setOnClickListener {
-            onclickPostItem.clickPostItem(position, id, userId)
+            onclickPostItem.navigateToCommentsActivity(position, id, userId)
         }
     }
 

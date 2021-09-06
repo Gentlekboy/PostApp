@@ -14,6 +14,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
@@ -68,7 +69,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         binding.postRecyclerview.layoutManager = linearLayoutManager
 
         binding.addPostButton.setOnClickListener {
-            addNewPost()
+            sendPostToServer()
         }
 
         binding.editTextContainer.setOnClickListener {
@@ -76,7 +77,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
             inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
         }
 
-        displayPostsOnUi()
+        fetchAndDisplayPostsOnUi()
         filterPosts()
     }
 
@@ -113,48 +114,38 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         })
     }
 
-    private fun addNewPost(){
+    private fun sendPostToServer(){
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         newPostBody = binding.addPostEditText.text.toString().trim()
+        val id = listOfPosts.size + 1
 
         if (newPostBody.isNotEmpty()){
-            var id = 101
-            val postItems = PostItems(newPostBody, id, "Kufre's Post", 11)
+            viewModel.makeAPostToApi(11, id, "Kufre's Post", newPostBody)
+            viewModel.pushPost2.observe(this, {
 
-            id++
+                if (it.isSuccessful){
+                    val postItems = PostItems(newPostBody, id, "Kufre's Post", 11)
+                    listOfPosts.add(postItems)
+                    copyOfListOfPosts.add(postItems)
+                    postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
 
-            listOfPosts.add(postItems)
-            copyOfListOfPosts.add(postItems)
-            postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
+                    binding.addPostEditText.text = null
+                    binding.addPostEditText.clearFocus()
 
-            binding.addPostEditText.text = null
-            binding.addPostEditText.clearFocus()
+                    //Hide keyboard after clicking the comment button
+                    inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
 
-            //Hide keyboard after clicking the comment button
-            inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
-
-            sendPostToServer(id, newPostBody)
+                    Log.d("GKB", "sendPostToServer: ${it.code()}")
+                }else{
+                    Log.d("GKB", "sendPostToServer: ${it.code()}")
+                    Log.d("GKB", "sendPostToServer: ${it.errorBody()}")
+                }
+            })
         }
     }
 
-    private fun sendPostToServer(id: Int,  body: String){
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        viewModel.makeAPostToApi(11, id, "Kufre's Post", body)
-        viewModel.pushPost2.observe(this, {
-
-            Log.d("GKB", "sendPostToServer: ${viewModel.pushPost2}")
-
-            if (it.isSuccessful){
-                Log.d("GKB", "sendPostToServer: ${it.body()}")
-                Log.d("GKB", "sendPostToServer: ${it.code()}")
-            }else{
-                Log.d("GKB", "sendPostToServer: ${it.code()}")
-                Log.d("GKB", "sendPostToServer: ${it.errorBody()}")
-            }
-        })
-    }
-
     //This function fetches posts and displays them on the UI
-    private fun displayPostsOnUi(){
+    private fun fetchAndDisplayPostsOnUi(){
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.fetchPosts()
         viewModel.allPosts.observe(this, {
@@ -170,20 +161,19 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     }
 
     //This function handles clicking items on the recyclerview and passing data to the next activity
-    override fun clickPostItem(position: Int, id: Int, userId: Int) {
+    override fun navigateToCommentsActivity(position: Int, id: Int, userId: Int) {
+        val intent = Intent(this, CommentActivity::class.java)
+
         if (listOfPosts.size > 100){
-            val intent = Intent(this, CommentActivity::class.java)
-            intent.putExtra("postId", id)
-            intent.putExtra("userId", userId)
             intent.putExtra("postBody", newPostBody)
-            startActivity(intent)
         }else{
             val postBody = response[position].body
-            val intent = Intent(this, CommentActivity::class.java)
-            intent.putExtra("postId", id)
-            intent.putExtra("userId", userId)
             intent.putExtra("postBody", postBody)
-            startActivity(intent)
         }
+
+        intent.putExtra("postId", id)
+        intent.putExtra("userId", userId)
+        startActivity(intent)
+        Toast.makeText(this, "$id", Toast.LENGTH_SHORT).show()
     }
 }
