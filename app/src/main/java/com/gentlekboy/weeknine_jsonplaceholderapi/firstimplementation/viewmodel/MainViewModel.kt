@@ -16,6 +16,7 @@ class MainViewModel(private val repository: Repository): ViewModel() {
 //    val pushPost: MutableLiveData<Response<PostItems>> = MutableLiveData()
     val pushPost2: MutableLiveData<Response<PostItems>> = MutableLiveData()
 
+    //Save fetched posts to livedata
     fun fetchPosts(){
         viewModelScope.launch {
             val response = repository.getPost()
@@ -23,6 +24,7 @@ class MainViewModel(private val repository: Repository): ViewModel() {
         }
     }
 
+    //Save fetched comments to livedata
     fun fetchComments(id: String){
         viewModelScope.launch {
             val response = repository.getComment(id)
@@ -37,6 +39,7 @@ class MainViewModel(private val repository: Repository): ViewModel() {
 //        }
 //    }
 
+    //Save posted response to livedata
     fun makeAPostToApi(userId: Int, id: Int, title: String, body: String){
         viewModelScope.launch {
             val response = repository.pushPost2(userId, id, title, body)
