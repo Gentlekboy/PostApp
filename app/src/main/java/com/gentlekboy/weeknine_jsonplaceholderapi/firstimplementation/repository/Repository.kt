@@ -15,9 +15,9 @@ class Repository {
         return RetrofitInstance.api.getComment(id)
     }
 
-    suspend fun pushPost(post: PostItems): Response<PostItems>{
-        return RetrofitInstance.api.pushPost(post)
-    }
+//    suspend fun pushPost(post: PostItems): Response<PostItems>{
+//        return RetrofitInstance.api.pushPost(post)
+//    }
 
     suspend fun pushPost2(userId: Int, id: Int, title: String, body: String): Response<PostItems>{
         return RetrofitInstance.api.pushPost2(userId, id, title, body)

@@ -13,7 +13,7 @@ import retrofit2.Response
 class MainViewModel(private val repository: Repository): ViewModel() {
     val allPosts: MutableLiveData<Response<Posts>> = MutableLiveData()
     val allComments: MutableLiveData<Response<Comments>> = MutableLiveData()
-    val pushPost: MutableLiveData<Response<PostItems>> = MutableLiveData()
+//    val pushPost: MutableLiveData<Response<PostItems>> = MutableLiveData()
     val pushPost2: MutableLiveData<Response<PostItems>> = MutableLiveData()
 
     fun fetchPosts(){
@@ -30,14 +30,14 @@ class MainViewModel(private val repository: Repository): ViewModel() {
         }
     }
 
-    fun pushPost(post: PostItems){
-        viewModelScope.launch {
-            val response = repository.pushPost(post)
-            pushPost.value = response
-        }
-    }
+//    fun pushPost(post: PostItems){
+//        viewModelScope.launch {
+//            val response = repository.pushPost(post)
+//            pushPost.value = response
+//        }
+//    }
 
-    fun pushPost2(userId: Int, id: Int, title: String, body: String){
+    fun makeAPostToApi(userId: Int, id: Int, title: String, body: String){
         viewModelScope.launch {
             val response = repository.pushPost2(userId, id, title, body)
             pushPost2.value = response

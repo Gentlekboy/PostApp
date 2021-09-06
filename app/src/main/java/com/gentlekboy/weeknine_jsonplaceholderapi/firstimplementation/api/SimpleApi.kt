@@ -17,11 +17,11 @@ interface SimpleApi  {
     ): Response<Comments>
 
     //Make post request as JSON format
-    @POST("posts")
-    suspend fun pushPost(
-        @Body
-        post: PostItems
-    ): Response<PostItems>
+//    @POST("posts")
+//    suspend fun pushPost(
+//        @Body
+//        post: PostItems
+//    ): Response<PostItems>
 
     //Make post request as form URL encoded format
     @FormUrlEncoded
