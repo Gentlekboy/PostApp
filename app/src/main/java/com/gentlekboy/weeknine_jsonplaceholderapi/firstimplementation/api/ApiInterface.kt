@@ -6,7 +6,7 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data
 import retrofit2.Response
 import retrofit2.http.*
 
-interface SimpleApi  {
+interface ApiInterface  {
     @GET("posts")
     suspend fun getPost(): Response<Posts>
 
