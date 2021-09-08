@@ -15,10 +15,10 @@
             android:name=".secondimplementation.ui.MvcPostActivity"
             android:exported="true" />
         <activity
-            android:name=".firstimplementation.ui.CommentActivity"
+            android:name=".firstimplementation.ui.comments.CommentActivity"
             android:exported="true" />
         <activity
-            android:name=".firstimplementation.ui.PostActivity"
+            android:name=".firstimplementation.ui.posts.PostActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
