@@ -4,7 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMainBinding
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.PostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.PostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.ui.MvcPostActivity
 
 private lateinit var binding: ActivityMainBinding
 
@@ -16,6 +17,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.firstImplementationButton.setOnClickListener {
             startActivity(Intent(this, PostActivity::class.java))
+        }
+
+        binding.secondImplementationButton.setOnClickListener {
+            startActivity(Intent(this, MvcPostActivity::class.java))
         }
     }
 }
