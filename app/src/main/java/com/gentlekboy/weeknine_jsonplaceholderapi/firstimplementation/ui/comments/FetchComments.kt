@@ -1,4 +1,4 @@
-package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.comments
+package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.comments
 
 import android.content.Context
 import android.widget.ImageView
