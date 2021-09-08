@@ -6,4 +6,166 @@
     android:layout_height="match_parent"
     tools:context=".secondimplementation.ui.MvcPostActivity">
 
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/dosis_extrabold"
+        android:text="@string/postapp"
+        android:textSize="24sp"
+        android:textColor="@color/blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        style="@style/Widget.AppCompat.SearchView.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:iconifiedByDefault="false"
+        android:focusable="true"
+        android:background="@drawable/post_edit_text_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/app_name"
+        app:layout_constraintTop_toBottomOf="@+id/app_name"
+        app:queryHint="Filter posts" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:scrollbars="vertical"
+        android:scrollbarSize="3dp"
+        android:fadeScrollbars="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_image_card"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/post_profile_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/my_profile_image"
+                    app:srcCompat="@drawable/my_image" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/edit_text_container"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/post_edit_text_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profile_image_card"
+                app:layout_constraintTop_toTopOf="@+id/profile_image_card">
+
+                <EditText
+                    android:id="@+id/add_post_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:autofillHints="none"
+                    android:background="@drawable/comment_edittext_background"
+                    android:hint="@string/what_do_you_want_to_talk_about"
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/add_post_button"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/post_button_border"
+                android:text="@string/make_post"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="@+id/edit_text_container"
+                app:layout_constraintStart_toStartOf="@+id/edit_text_container"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_container" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                style="@style/LinearLayoutButtons"
+                android:layout_marginTop="8dp"
+                android:paddingVertical="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_post_button">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/live_button"
+                    style="@style/Button"
+                    android:text="@string/live"
+                    android:textColor="@color/black"
+                    app:backgroundTint="@color/white"
+                    android:fontFamily="@font/dosis_medium"
+                    app:icon="@drawable/ic_baseline_videocam_24"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/gray" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/post_photo_button"
+                    style="@style/Button"
+                    android:text="@string/photo"
+                    android:textColor="@color/black"
+                    app:backgroundTint="@color/white"
+                    android:fontFamily="@font/dosis_medium"
+                    app:icon="@drawable/ic_baseline_add_photo_alternate_24"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/gray" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/create_room_button"
+                    style="@style/Button"
+                    android:text="@string/room"
+                    android:textColor="@color/black"
+                    app:backgroundTint="@color/white"
+                    android:fontFamily="@font/dosis_medium"
+                    app:icon="@drawable/ic_baseline_video_call_24"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/gray" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/post_recyclerview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/dark_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
