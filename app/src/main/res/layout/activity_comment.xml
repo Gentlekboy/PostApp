@@ -152,7 +152,6 @@
                         <androidx.appcompat.widget.AppCompatToggleButton
                             android:id="@+id/like_button"
                             style="@style/Button"
-                            android:layout_height="wrap_content"
                             android:textOff="@string/like"
                             android:textOn="@string/like" />
 

@@ -88,6 +88,8 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
                 response = it.body()!!
                 postAdapter.addPosts(response)
                 copyOfListOfPosts.addAll(listOfPosts)
+
+                Log.d("GKB", "fetchAndDisplayPostsOnUi: ON THREAD ${Thread.currentThread().name}")
             }else{
                 Log.d("GKB", "onCreate: ${it.errorBody()}")
             }

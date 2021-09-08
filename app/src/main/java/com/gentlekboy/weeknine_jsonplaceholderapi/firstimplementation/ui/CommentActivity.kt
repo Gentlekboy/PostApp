@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,8 +27,10 @@ class CommentActivity : AppCompatActivity() {
     private lateinit var inputMethodManager: InputMethodManager
     private lateinit var listOfComments: ArrayList<CommentItems>
     private var numberOfComments by Delegates.notNull<Int>()
+    private var numberOfCommentsForNewPost by Delegates.notNull<Int>()
     private var numberOfLikes by Delegates.notNull<Int>()
     private var userId by Delegates.notNull<Int>()
+    private var postIdToInteger by Delegates.notNull<Int>()
     private lateinit var postId: String
     private lateinit var postBody: String
 
@@ -49,13 +52,49 @@ class CommentActivity : AppCompatActivity() {
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         listOfComments = arrayListOf()
         numberOfComments = 5
-        numberOfLikes = 25
+//        numberOfLikes = 25
         commentAdapter = CommentAdapter(listOfComments, this)
 
         //Set up recyclerview
         binding.commentsRecyclerview.adapter = commentAdapter
         binding.commentsRecyclerview.setHasFixedSize(true)
         binding.commentsRecyclerview.layoutManager = linearLayoutManager
+
+        //Convert post id of string type to integer
+        postIdToInteger = postId.toInt()
+
+        if (postIdToInteger < 101 && postIdToInteger % 2 == 0){
+            numberOfLikes = 6
+        } else if (postIdToInteger < 101 && postIdToInteger % 3 == 0){
+            numberOfLikes = 12
+        } else if (postIdToInteger < 101 && postIdToInteger % 5 == 0){
+            numberOfLikes = 8
+        } else if (postIdToInteger < 101 && postIdToInteger % 7 == 0){
+            numberOfLikes = 14
+        } else if (postIdToInteger < 101 && postIdToInteger % 11 == 0){
+            numberOfLikes = 2
+        } else if (postIdToInteger < 101 && postIdToInteger % 13 == 0){
+            numberOfLikes = 13
+        } else if (postIdToInteger < 101 && postIdToInteger % 17 == 0){
+            numberOfLikes = 3
+        } else if (postIdToInteger < 101 && postIdToInteger % 19 == 0){
+            numberOfLikes = 1
+        } else if (postIdToInteger > 100){
+            numberOfLikes = 0
+        } else{
+            numberOfLikes = 36
+        }
+
+        if (postIdToInteger > 100){
+            numberOfCommentsForNewPost = 0
+            binding.comments.visibility = View.INVISIBLE
+            binding.numberOfComments.visibility = View.INVISIBLE
+            binding.likeIcon.visibility = View.INVISIBLE
+            binding.numberOfLikes.visibility = View.INVISIBLE
+        }
+
+        //Set number of likes on UI
+        binding.numberOfLikes.text = numberOfLikes.toString()
 
         //Request focus and show keyboard when comment button is clicked
         binding.commentButton.setOnClickListener {
@@ -78,11 +117,23 @@ class CommentActivity : AppCompatActivity() {
         binding.likeButton.setOnCheckedChangeListener { compoundButton, _ ->
             if (compoundButton.isChecked){
                 numberOfLikes++
+
+                if (postIdToInteger > 100){
+                    binding.likeIcon.visibility = View.VISIBLE
+                    binding.numberOfLikes.visibility = View.VISIBLE
+                }
+
                 binding.numberOfLikes.text = numberOfLikes.toString()
                 binding.likeIcon.setColorFilter(resources.getColor(R.color.blue))
                 binding.likeButton.setTextColor(resources.getColor(R.color.blue))
             }else{
                 numberOfLikes--
+
+                if (postIdToInteger >100){
+                    binding.numberOfLikes.visibility = View.INVISIBLE
+                    binding.likeIcon.visibility = View.INVISIBLE
+                }
+
                 binding.numberOfLikes.text = numberOfLikes.toString()
                 binding.likeIcon.setColorFilter(resources.getColor(R.color.black))
                 binding.likeButton.setTextColor(resources.getColor(R.color.black))
@@ -189,14 +240,30 @@ class CommentActivity : AppCompatActivity() {
         val newInputtedComment = binding.addComment.text.toString().trim()
 
         if (newInputtedComment.isNotEmpty()){
-            numberOfComments++
+            val commentItems: CommentItems
 
-            val commentItems = CommentItems(newInputtedComment, "kufreabasi.udoh@decagon.dev", 11, "Kufre Udoh", numberOfComments)
+            if (postIdToInteger > 100){
+                numberOfCommentsForNewPost++
+
+                if (numberOfCommentsForNewPost == 1){
+                    binding.comments.text = getString(R.string._comment)
+                } else {
+                    binding.comments.text = getString(R.string.comments)
+                }
+
+                binding.numberOfComments.text = numberOfCommentsForNewPost.toString()
+                commentItems = CommentItems(newInputtedComment, "kufreabasi.udoh@decagon.dev", 11, "Kufre Udoh", numberOfCommentsForNewPost)
+            }else{
+                numberOfComments++
+                binding.numberOfComments.text = numberOfComments.toString()
+                commentItems = CommentItems(newInputtedComment, "kufreabasi.udoh@decagon.dev", 11, "Kufre Udoh", numberOfComments)
+            }
 
             listOfComments.add(commentItems)
             commentAdapter.notifyItemInserted(listOfComments.size-1)
 
-            binding.numberOfComments.text = numberOfComments.toString()
+            binding.comments.visibility = View.VISIBLE
+            binding.numberOfComments.visibility = View.VISIBLE
             binding.addComment.text = null
             binding.addComment.clearFocus()
 
