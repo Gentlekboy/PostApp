@@ -15,7 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.PostItems
 
-class PostAdapter(private var listOfPosts: MutableList<PostItems>, private var context: Context, private var onclickPostItem: OnclickPostItem): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(
+    private var listOfPosts: MutableList<PostItems>,
+    private var context: Context,
+    private var onclickPostItem: OnclickPostItem): RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     //View Holder
     inner class PostViewHolder(viewItems: View): RecyclerView.ViewHolder(viewItems){
@@ -58,6 +61,7 @@ class PostAdapter(private var listOfPosts: MutableList<PostItems>, private var c
         if (id >100){
             holder.numberOfComments.visibility = View.INVISIBLE
             holder.commentText.visibility = View.INVISIBLE
+            holder.postTime.text = context.getString(R.string.few_moments_ago)
         }
 
         if (id < 101 && id % 2 == 0){
