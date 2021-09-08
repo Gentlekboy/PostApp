@@ -11,14 +11,13 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.comments.CommentItems
 
 class CommentAdapter(private var listOfComments: ArrayList<CommentItems>, private val context: Context): RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
-//    private var listOfComments: ArrayList<CommentItems> = ArrayList()
-
     //View Holder
     inner class CommentViewHolder(viewItems: View): RecyclerView.ViewHolder(viewItems){
         val comentBody = viewItems.findViewById<TextView>(R.id.comment_body)
         val commentImage = viewItems.findViewById<ImageView>(R.id.comment_picture)
         val commentName = viewItems.findViewById<TextView>(R.id.comment_name)
         val commentBio = viewItems.findViewById<TextView>(R.id.comment_bio)
+        val commentTime = viewItems.findViewById<TextView>(R.id.comment_time)
     }
 
     //Add posts to list
@@ -37,15 +36,48 @@ class CommentAdapter(private var listOfComments: ArrayList<CommentItems>, privat
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val commentPosition = listOfComments[position]
+        val id = commentPosition.id
 
         holder.comentBody.text = commentPosition.body
 
-        if (commentPosition.id % 2 == 0){
-            holder.commentImage.setImageResource(R.drawable.user_7)
+        if (position > 5){
+            holder.commentTime.text = context.getString(R.string.few_moments_ago)
+        }
+
+        if (id % 2 == 0){
+            holder.commentImage.setImageResource(R.drawable.user_11)
             holder.commentName.text = context.getString(R.string.chinenye)
             holder.commentBio.text = context.getString(R.string.chinenye_bio)
-        }else{
+        }else if (id % 3 ==0){
+            holder.commentImage.setImageResource(R.drawable.user_12)
+            holder.commentName.text = context.getString(R.string.kufre_udoh)
+            holder.commentBio.text = context.getString(R.string.software_engineer_at_google)
+        }else if (id % 5 ==0){
+            holder.commentImage.setImageResource(R.drawable.user_13)
+            holder.commentName.text = context.getString(R.string.kufre_udoh)
+            holder.commentBio.text = context.getString(R.string.software_engineer_at_google)
+        }else if (id % 7 ==0){
+            holder.commentImage.setImageResource(R.drawable.user_14)
+            holder.commentName.text = context.getString(R.string.kufre_udoh)
+            holder.commentBio.text = context.getString(R.string.software_engineer_at_google)
+        }else if (id % 11 ==0){
             holder.commentImage.setImageResource(R.drawable.my_image)
+            holder.commentName.text = context.getString(R.string.kufre_udoh)
+            holder.commentBio.text = context.getString(R.string.software_engineer_at_google)
+        }else if (id % 13 ==0){
+            holder.commentImage.setImageResource(R.drawable.user_16)
+            holder.commentName.text = context.getString(R.string.kufre_udoh)
+            holder.commentBio.text = context.getString(R.string.software_engineer_at_google)
+        }else if (id % 17 ==0){
+            holder.commentImage.setImageResource(R.drawable.user_17)
+            holder.commentName.text = context.getString(R.string.kufre_udoh)
+            holder.commentBio.text = context.getString(R.string.software_engineer_at_google)
+        }else if (id % 19 ==0 ){
+            holder.commentImage.setImageResource(R.drawable.user_18)
+            holder.commentName.text = context.getString(R.string.kufre_udoh)
+            holder.commentBio.text = context.getString(R.string.software_engineer_at_google)
+        } else {
+            holder.commentImage.setImageResource(R.drawable.user_15)
             holder.commentName.text = context.getString(R.string.kufre_udoh)
             holder.commentBio.text = context.getString(R.string.software_engineer_at_google)
         }
