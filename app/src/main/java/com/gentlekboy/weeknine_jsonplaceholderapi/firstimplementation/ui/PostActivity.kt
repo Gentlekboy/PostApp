@@ -25,6 +25,8 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adap
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.PostItems
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.Posts
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.repository.Repository
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.FetchPosts
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.FetchPosts.filterPosts
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModelFactory
 
@@ -75,7 +77,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         }
 
         fetchAndDisplayPostsOnUi()
-        filterPosts()
+        filterPosts(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
 
     //This function fetches posts and displays them on the UI
@@ -89,7 +91,6 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
                 postAdapter.addPosts(response)
                 copyOfListOfPosts.addAll(listOfPosts)
 
-                Log.d("GKB", "fetchAndDisplayPostsOnUi: ON THREAD ${Thread.currentThread().name}")
             }else{
                 Log.d("GKB", "onCreate: ${it.errorBody()}")
             }
@@ -125,39 +126,6 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
                 }
             })
         }
-    }
-
-    //This function filters posts based on user's query in the search view
-    private fun filterPosts(){
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                inputMethodManager.hideSoftInputFromWindow(binding.searchView.windowToken, 0)
-                return true
-            }
-
-            //Filters posts as user types in the search view
-            override fun onQueryTextChange(newText: String?): Boolean {
-                listOfPosts.clear()
-                val searchText = newText?.lowercase()?.trim()
-
-                if (searchText != null) {
-                    if (searchText.isNotEmpty()){
-                        copyOfListOfPosts.forEach {
-                            if (it.body.lowercase().contains(searchText)){
-                                listOfPosts.add(it)
-                            }
-                        }
-
-                        postAdapter.notifyDataSetChanged()
-                    }else{
-                        listOfPosts.clear()
-                        listOfPosts.addAll(copyOfListOfPosts)
-                        postAdapter.notifyDataSetChanged()
-                    }
-                }
-                return true
-            }
-        })
     }
 
     //This function handles clicking items on the recyclerview and passing data to the next activity
