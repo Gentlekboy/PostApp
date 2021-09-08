@@ -9,7 +9,7 @@
     <string name="_14h">5h</string>
     <string name="post_privacy">Post privacy</string>
     <string name="like_icon">Like icon</string>
-    <string name="_25">1</string>
+    <string name="_25">25</string>
     <string name="comments">comments</string>
     <string name="like">Like</string>
     <string name="share">Share</string>
@@ -44,6 +44,7 @@
     <string name="cassidey_bio">UI/UX Engineer at Flutterwave</string>
     <string name="leave_your_comments_here">Leave your comments here…</string>
     <string name="comment">Comment</string>
+    <string name="_comment">comment</string>
     <string name="_comments">Comments</string>
     <string name="my_profile_image">My profile image</string>
 </resources>
