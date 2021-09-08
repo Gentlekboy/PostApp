@@ -20,51 +20,36 @@ class MainViewModel(private val repository: Repository): ViewModel() {
 
     //Save fetched posts to livedata
     fun fetchPosts(){
-        viewModelScope.launch{
-            withContext(Dispatchers.IO){
-                try {
-                    val response = repository.getPost()
-
-                    withContext(Dispatchers.Main){
-                        allPosts.value = response
-                    }
-                }catch (e: Exception){
-                    Log.d("GKB", "fetchPosts: ${e.message}")
-                }
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                val response = repository.getPost()
+                allPosts.postValue(response)
+            }catch (e: Exception){
+                Log.d("GKB", "fetchPosts: ${e.message}")
             }
         }
     }
 
     //Save fetched comments to livedata
     fun fetchComments(id: String){
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                try {
-                    val response = repository.getComment(id)
-
-                    withContext(Dispatchers.Main){
-                        allComments.value = response
-                    }
-                }catch (e: Exception){
-                    Log.d("GKB", "fetchPosts: ${e.message}")
-                }
+        viewModelScope.launch (Dispatchers.IO) {
+            try {
+                val response = repository.getComment(id)
+                allComments.postValue(response)
+            }catch (e: Exception){
+                Log.d("GKB", "fetchComments: ${e.message}")
             }
         }
     }
 
     //Save posted response to livedata
     fun makeAPostToApi(userId: Int, id: Int, title: String, body: String){
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                try{
-                    val response = repository.pushPost2(userId, id, title, body)
-
-                    withContext(Dispatchers.Main){
-                        pushPost2.value = response
-                    }
-                }catch (e: Exception){
-                    Log.d("GKB", "fetchPosts: ${e.message}")
-                }
+        viewModelScope.launch (Dispatchers.IO) {
+            try{
+                val response = repository.pushPost2(userId, id, title, body)
+                pushPost2.postValue(response)
+            }catch (e: Exception){
+                Log.d("GKB", "fetchPosts: ${e.message}")
             }
         }
     }
