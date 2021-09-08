@@ -1,4 +1,4 @@
-package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui
+package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.comments
 
 import android.content.Context
 import android.content.Intent
@@ -14,7 +14,7 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityCommentBin
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter.CommentAdapter
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.comments.CommentItems
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.repository.Repository
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.comments.FetchComments.populatePostDetails
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.comments.FetchComments.populatePostDetails
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModelFactory
 import kotlin.properties.Delegates

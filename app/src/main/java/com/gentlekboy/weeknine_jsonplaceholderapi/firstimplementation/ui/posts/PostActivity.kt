@@ -1,4 +1,4 @@
-package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui
+package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts
 
 /*
 * Using the endpoints found here https://jsonplaceholder.typicode.com
@@ -16,7 +16,6 @@ import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityPostBinding
@@ -25,7 +24,7 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adap
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.PostItems
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.Posts
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.repository.Repository
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.FetchPosts
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.comments.CommentActivity
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.FetchPosts.filterPosts
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModelFactory

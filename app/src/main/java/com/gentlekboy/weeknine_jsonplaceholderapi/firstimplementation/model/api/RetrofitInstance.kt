@@ -1,4 +1,4 @@
-package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.api
+package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.api
 
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.utils.BASE_URL
 import okhttp3.OkHttpClient

@@ -1,4 +1,4 @@
-package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.api
+package com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.api
 
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.comments.Comments
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.PostItems
