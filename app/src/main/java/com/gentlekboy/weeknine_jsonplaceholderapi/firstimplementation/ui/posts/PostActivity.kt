@@ -25,7 +25,7 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.Posts
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.repository.Repository
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.comments.CommentActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.FetchPosts.filterPosts
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.SearchViewInPost.filterPostsWithSearchView
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModelFactory
 
@@ -53,6 +53,22 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
 
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
+        setUpRecyclerViewAdapter()
+
+        binding.addPostButton.setOnClickListener {
+            makeAPost()
+        }
+
+        binding.editTextContainer.setOnClickListener {
+            binding.addPostEditText.requestFocus()
+            inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
+        }
+
+        fetchPosts()
+        filterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
+    }
+
+    private fun setUpRecyclerViewAdapter(){
         //Initialize lists
         copyOfListOfPosts = mutableListOf() //copyOfListOfPosts contains all items in the adapter and is used to filter posts
         listOfPosts = mutableListOf() //listOfPosts holds items in the adapter
@@ -65,22 +81,10 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         binding.postRecyclerview.adapter = postAdapter
         binding.postRecyclerview.setHasFixedSize(true)
         binding.postRecyclerview.layoutManager = linearLayoutManager
-
-        binding.addPostButton.setOnClickListener {
-            sendPostToServer()
-        }
-
-        binding.editTextContainer.setOnClickListener {
-            binding.addPostEditText.requestFocus()
-            inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
-        }
-
-        fetchAndDisplayPostsOnUi()
-        filterPosts(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
 
     //This function fetches posts and displays them on the UI
-    private fun fetchAndDisplayPostsOnUi(){
+    private fun fetchPosts(){
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.fetchPosts()
         viewModel.allPosts.observe(this, {
@@ -97,7 +101,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     }
 
     //Makes a post request and adds new post to the recycler view
-    private fun sendPostToServer(){
+    private fun makeAPost(){
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         newPostBody = binding.addPostEditText.text.toString().trim()
         val id = listOfPosts.size + 1
