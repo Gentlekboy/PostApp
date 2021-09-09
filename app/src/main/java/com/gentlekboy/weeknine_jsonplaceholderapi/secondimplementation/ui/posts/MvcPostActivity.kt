@@ -36,10 +36,17 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         binding = ActivityMvcPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Initialize input method manager
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         setUpRecyclerViewAdapter()
 
+        //Add a new post when the add post button is clicked
+        binding.addPostButton.setOnClickListener {
+            makeAPostRequest()
+        }
+
+        //Set focus on edit text and open keyboard when edit text container is clicked
         binding.editTextContainer.setOnClickListener {
             binding.addPostEditText.requestFocus()
             inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
@@ -49,10 +56,11 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         mvcFilterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
 
+    //This function sets up the recycler view and adapter
     private fun setUpRecyclerViewAdapter(){
-        copyOfListOfPosts = mutableListOf() //copyOfListOfPosts contains all items in the adapter and is used to filter posts
-        listOfPosts = mutableListOf() //listOfPosts holds items in the adapter
-        reversedListOfPosts = listOfPosts.asReversed() //reversedListOfPosts reverses the list such that a new post appears on top
+        copyOfListOfPosts = mutableListOf() //Contains all items in the adapter and is used to filter posts
+        listOfPosts = mutableListOf() //Holds items in the adapter
+        reversedListOfPosts = listOfPosts.asReversed() //Reverses the list such that a new post appears on top
 
         postAdapter = MvcPostAdapter(reversedListOfPosts, this, this)
 
@@ -61,6 +69,47 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         binding.postRecyclerview.layoutManager = linearLayoutManager
     }
 
+    //This function makes a post request and adds new post to the recycler view
+    private fun makeAPostRequest(){
+        newPostBody = binding.addPostEditText.text.toString().trim()
+        val id = listOfPosts.size + 1
+        val postItems = MvcPostItems(newPostBody, id, "Kufre's Post", 11)
+
+        if (newPostBody.isNotEmpty()){
+            val connectedRetrofit = MvcRetrofit.api.makeAPost(postItems)
+            connectedRetrofit.enqueue(object : Callback<MvcPostItems?> {
+                override fun onResponse(call: Call<MvcPostItems?>, response: Response<MvcPostItems?>) {
+                    if (response.isSuccessful){
+                        addNewPostToRecyclerView(postItems)
+                        Toast.makeText(this@MvcPostActivity, "Post sent!.", Toast.LENGTH_LONG).show()
+                    }else{
+                        Log.d("GKB", "sendPostToServer: ${response.code()}")
+                        Toast.makeText(this@MvcPostActivity, "Check your internet and try again.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<MvcPostItems?>, t: Throwable) {
+                    Log.d("GKB", "sendPostToServer: ${t.message}")
+                    Toast.makeText(this@MvcPostActivity, "Check your internet and try again.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
+    //This function adds new post to the recycler view
+    private fun addNewPostToRecyclerView(postItems: MvcPostItems){
+        listOfPosts.add(postItems)
+        copyOfListOfPosts.add(postItems)
+        postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
+
+        binding.addPostEditText.text = null
+        binding.addPostEditText.clearFocus()
+
+        //Hide keyboard after clicking the comment button
+        inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
+    }
+
+    //This function fetches posts and displays them on the UI
     private fun fetchPosts(){
         val connectedRetrofit = MvcRetrofit.api.getPost()
         connectedRetrofit.enqueue(object : Callback<MvcPosts?> {
@@ -78,6 +127,7 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         })
     }
 
+    //This function handles clicking items on the recyclerview and passing data to the next activity
     override fun navigateToCommentsActivity(position: Int, id: Int, userId: Int) {
         val intent = Intent(this, MvcCommentActivity::class.java)
 
