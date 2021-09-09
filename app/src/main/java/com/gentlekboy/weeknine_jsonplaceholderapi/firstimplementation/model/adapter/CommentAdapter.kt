@@ -20,7 +20,7 @@ class CommentAdapter(private var listOfComments: ArrayList<CommentItems>, privat
         val commentTime = viewItems.findViewById<TextView>(R.id.comment_time)
     }
 
-    //Add posts to list
+    //Add comments to list
     fun addComments(comments: List<CommentItems>?) {
         if (comments != null) {
             listOfComments.clear()
