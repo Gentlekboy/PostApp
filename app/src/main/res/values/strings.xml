@@ -48,4 +48,6 @@
     <string name="_comments">Comments</string>
     <string name="my_profile_image">My profile image</string>
     <string name="few_moments_ago">few moments ago</string>
+    <string name="mvc_implementation">MVC Implementation</string>
+    <string name="mvvm_implementation">MVVM Implementation</string>
 </resources>

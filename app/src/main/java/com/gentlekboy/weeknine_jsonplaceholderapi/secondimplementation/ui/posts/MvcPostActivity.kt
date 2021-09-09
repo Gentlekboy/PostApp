@@ -3,7 +3,9 @@ package com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.ui.posts
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +55,7 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         }
 
         fetchPosts()
+        displayAppLayouts()
         mvcFilterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
 
@@ -125,6 +128,20 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
                 Log.d("GKB", "onFailure: ${t.message}")
             }
         })
+    }
+
+    //This function hides starting views and displays main layouts
+    private fun displayAppLayouts(){
+        val handler = Handler()
+        handler.postDelayed({
+            if (reversedListOfPosts.isNotEmpty()){
+                binding.nameOfApp.visibility = View.GONE
+                binding.implementationType.visibility = View.GONE
+                binding.appName.visibility = View.VISIBLE
+                binding.searchView.visibility = View.VISIBLE
+                binding.nestedScrollview.visibility = View.VISIBLE
+            }
+        }, 2000)
     }
 
     //This function handles clicking items on the recyclerview and passing data to the next activity

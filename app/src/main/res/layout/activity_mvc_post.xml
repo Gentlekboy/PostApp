@@ -14,8 +14,9 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/dosis_extrabold"
         android:text="@string/postapp"
-        android:textSize="24sp"
         android:textColor="@color/blue"
+        android:textSize="24sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,21 +28,51 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        app:iconifiedByDefault="false"
-        android:focusable="true"
         android:background="@drawable/post_edit_text_container"
+        android:focusable="true"
+        android:visibility="invisible"
+        app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/app_name"
         app:layout_constraintTop_toBottomOf="@+id/app_name"
         app:queryHint="Filter posts" />
 
+    <TextView
+        android:id="@+id/name_of_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dosis_extrabold"
+        android:text="@string/postapp"
+        android:textColor="@color/blue"
+        android:textSize="56sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <TextView
+        android:id="@+id/implementation_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/dosis_medium"
+        android:text="@string/mvc_implementation"
+        android:textColor="@color/blue"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@+id/name_of_app"
+        app:layout_constraintStart_toStartOf="@+id/name_of_app"
+        app:layout_constraintTop_toBottomOf="@+id/name_of_app" />
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scrollview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
-        android:scrollbars="vertical"
-        android:scrollbarSize="3dp"
         android:fadeScrollbars="true"
+        android:scrollbarSize="3dp"
+        android:scrollbars="vertical"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -66,8 +97,8 @@
                     android:id="@+id/post_profile_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
                     android:contentDescription="@string/my_profile_image"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/my_image" />
             </androidx.cardview.widget.CardView>
 
@@ -125,10 +156,10 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/live_button"
                     style="@style/Button"
+                    android:fontFamily="@font/dosis_medium"
                     android:text="@string/live"
                     android:textColor="@color/black"
                     app:backgroundTint="@color/white"
-                    android:fontFamily="@font/dosis_medium"
                     app:icon="@drawable/ic_baseline_videocam_24"
                     app:iconGravity="textStart"
                     app:iconTint="@color/gray" />
@@ -136,10 +167,10 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/post_photo_button"
                     style="@style/Button"
+                    android:fontFamily="@font/dosis_medium"
                     android:text="@string/photo"
                     android:textColor="@color/black"
                     app:backgroundTint="@color/white"
-                    android:fontFamily="@font/dosis_medium"
                     app:icon="@drawable/ic_baseline_add_photo_alternate_24"
                     app:iconGravity="textStart"
                     app:iconTint="@color/gray" />
@@ -147,10 +178,10 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/create_room_button"
                     style="@style/Button"
+                    android:fontFamily="@font/dosis_medium"
                     android:text="@string/room"
                     android:textColor="@color/black"
                     app:backgroundTint="@color/white"
-                    android:fontFamily="@font/dosis_medium"
                     app:icon="@drawable/ic_baseline_video_call_24"
                     app:iconGravity="textStart"
                     app:iconTint="@color/gray" />
