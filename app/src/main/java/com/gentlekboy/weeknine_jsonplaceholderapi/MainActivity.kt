@@ -15,10 +15,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Navigate to the first implementation
         binding.firstImplementationButton.setOnClickListener {
             startActivity(Intent(this, PostActivity::class.java))
         }
 
+        //Navigate to the second implementation
         binding.secondImplementationButton.setOnClickListener {
             startActivity(Intent(this, MvcPostActivity::class.java))
         }
