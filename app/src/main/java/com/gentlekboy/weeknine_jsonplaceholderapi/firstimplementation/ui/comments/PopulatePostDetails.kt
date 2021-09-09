@@ -5,9 +5,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
 
-object FetchComments {
+object PopulatePostDetails {
     //This function populates details of post from post activity
-    fun populatePostDetails(
+    fun populatePostDetailsInCommentActivity(
         postBodyTextView: TextView,
         postBody: String,
         userId: Int,

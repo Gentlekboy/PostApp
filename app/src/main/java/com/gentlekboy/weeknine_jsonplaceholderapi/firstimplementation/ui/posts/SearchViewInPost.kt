@@ -5,9 +5,9 @@ import androidx.appcompat.widget.SearchView
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.adapter.PostAdapter
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data.posts.PostItems
 
-object FetchPosts {
+object SearchViewInPost {
     //This function filters posts based on user's query in the search view
-    fun filterPosts(
+    fun filterPostsWithSearchView(
         searchView: SearchView,
         inputMethodManager: InputMethodManager,
         listOfPosts: MutableList<PostItems>,
