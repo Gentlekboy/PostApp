@@ -7,8 +7,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object MvcRetrofit {
+    //Set up logging interceptor
     private val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
+    //Set up retrofit
     private val retrofit by lazy {
         Retrofit.Builder()
             .client(OkHttpClient.Builder().addInterceptor(loggingInterceptor).build())
@@ -17,6 +19,7 @@ object MvcRetrofit {
             .build()
     }
 
+    //Connect retrofit to endpoint in interface
     val api: MvcApiInterface by lazy {
         retrofit.create(MvcApiInterface::class.java)
     }
