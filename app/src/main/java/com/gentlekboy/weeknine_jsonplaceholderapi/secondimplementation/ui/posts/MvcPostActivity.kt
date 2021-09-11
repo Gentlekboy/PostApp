@@ -21,6 +21,9 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.ui.posts.
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnScrollChangedListener
+
 
 class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
     private lateinit var binding: ActivityMvcPostBinding
@@ -54,8 +57,15 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
             inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
         }
 
+        //Set focus on edit text and open keyboard when edit text container is clicked
+        binding.fab.setOnClickListener {
+            binding.addPostEditText.requestFocus()
+            inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
+        }
+
         fetchPosts()
         displayAppLayouts()
+        floatingActionButtonVisibility()
         mvcFilterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
 
@@ -119,15 +129,32 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
             override fun onResponse(call: Call<MvcPosts?>, response: Response<MvcPosts?>) {
                 commentResponse = response.body()!!
 
-                postAdapter.addPosts(commentResponse)
-                copyOfListOfPosts.addAll(listOfPosts)
-                Log.d("GKB", "onResponse: $commentResponse")
+                if (response.isSuccessful){
+                    postAdapter.addPosts(commentResponse)
+                    copyOfListOfPosts.addAll(listOfPosts)
+                }else{
+                    Toast.makeText(this@MvcPostActivity, "Something went wrong. Try again!", Toast.LENGTH_SHORT).show()
+                    Log.d("GKB", "onResponse: ${response.message()}")
+                }
             }
 
             override fun onFailure(call: Call<MvcPosts?>, t: Throwable) {
                 Log.d("GKB", "onFailure: ${t.message}")
             }
         })
+    }
+
+    //Listen to scroll and display or hide floating action button
+    private fun floatingActionButtonVisibility(){
+        var previousScrollY = 0
+        binding.nestedScrollview.viewTreeObserver.addOnScrollChangedListener {
+            if (binding.nestedScrollview.scrollY > previousScrollY && binding.fab.visibility != View.VISIBLE) {
+                binding.fab.show()
+            } else if (binding.nestedScrollview.scrollY < previousScrollY && binding.fab.visibility == View.VISIBLE) {
+                binding.fab.hide()
+            }
+            previousScrollY = binding.nestedScrollview.scrollY
+        }
     }
 
     //This function hides starting views and displays main layouts

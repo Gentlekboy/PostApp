@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/drawable/comment_background.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/drawable/comment_edittext_background.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_photo_alternate_24.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/ic_baseline_post_add_24.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/linear_layout_buttons_border.xml" value="0.19537037037037036" />
         <entry key="app/src/main/res/drawable/post_button_background.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/drawable/post_button_border.xml" value="0.19537037037037036" />

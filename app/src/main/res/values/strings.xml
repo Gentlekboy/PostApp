@@ -50,4 +50,5 @@
     <string name="few_moments_ago">few moments ago</string>
     <string name="mvc_implementation">MVC Implementation</string>
     <string name="mvvm_implementation">MVVM Implementation</string>
+    <string name="add_a_new_post">Add a new post</string>
 </resources>

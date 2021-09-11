@@ -69,6 +69,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         }
 
         fetchPosts()
+        floatingActionButtonVisibility()
         displayAppLayouts()
         filterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
@@ -140,6 +141,19 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
                 Log.d("GKB", "onCreate: ${it.errorBody()}")
             }
         })
+    }
+
+    //Listen to scroll and display or hide floating action button
+    private fun floatingActionButtonVisibility(){
+        var previousScrollY = 0
+        binding.nestedScrollview.viewTreeObserver.addOnScrollChangedListener {
+            if (binding.nestedScrollview.scrollY > previousScrollY && binding.fab.visibility != View.VISIBLE) {
+                binding.fab.show()
+            } else if (binding.nestedScrollview.scrollY < previousScrollY && binding.fab.visibility == View.VISIBLE) {
+                binding.fab.hide()
+            }
+            previousScrollY = binding.nestedScrollview.scrollY
+        }
     }
 
     //This function hides starting views and displays main layouts
