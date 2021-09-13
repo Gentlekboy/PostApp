@@ -23,7 +23,9 @@
         <entry key="app/src/main/res/layout/activity_mvc_add.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_mvc_comment.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_mvc_post.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_mvc_welcome.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/layout/activity_post.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_welcome.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/layout/add_post_alert_dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/comments_view_holder.xml" value="0.25" />
         <entry key="app/src/main/res/layout/mvc_comments_view_holder.xml" value="0.1" />

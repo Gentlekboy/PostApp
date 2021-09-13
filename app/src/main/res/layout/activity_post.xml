@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".firstimplementation.ui.posts.PostActivity">
+    tools:context=".firstImplementation.ui.posts.PostActivity">
 
     <TextView
         android:id="@+id/app_name"
@@ -57,33 +57,6 @@
         app:layout_constraintEnd_toEndOf="@+id/progress_bar"
         app:layout_constraintStart_toStartOf="@+id/progress_bar"
         app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
-
-<!--    <TextView-->
-<!--        android:id="@+id/name_of_app"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/dosis_extrabold"-->
-<!--        android:text="@string/postapp"-->
-<!--        android:textColor="@color/blue"-->
-<!--        android:textSize="56sp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.5"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.45" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/implementation_type"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/dosis_medium"-->
-<!--        android:text="@string/mvvm_implementation"-->
-<!--        android:textColor="@color/blue"-->
-<!--        android:textSize="22sp"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/name_of_app"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/name_of_app"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/name_of_app" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

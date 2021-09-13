@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".secondimplementation.ui.comments.MvcCommentActivity">
+    tools:context=".secondImplementation.ui.comments.MvcCommentActivity">
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/button"
