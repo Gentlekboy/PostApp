@@ -7,10 +7,13 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.MainActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMvcPostBinding
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.adapter.MvcOnclickPostItem
@@ -195,6 +198,65 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         intent.putExtra("userId", userId)
         startActivity(intent)
         Toast.makeText(this, "$id", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun sharePost(position: Int, bodyOfPost: String) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, bodyOfPost)
+            type = "text/plain"
+        }
+
+        ContextCompat.startActivity(this, Intent.createChooser(intent, "Share via"), bundleOf())
+    }
+
+    override fun checkLikeButton(position: Int, id: Int, compoundButton: CompoundButton, likeCounter: TextView, likeIcon: ImageView, likeButton: ToggleButton) {
+        var numberOfLikes: Int
+
+        if (id < 101 && id % 2 == 0){
+            numberOfLikes = 6
+        } else if (id < 101 && id % 3 == 0){
+            numberOfLikes = 12
+        } else if (id < 101 && id % 5 == 0){
+            numberOfLikes = 8
+        } else if (id < 101 && id % 7 == 0){
+            numberOfLikes = 14
+        } else if (id < 101 && id % 11 == 0){
+            numberOfLikes = 2
+        } else if (id < 101 && id % 13 == 0){
+            numberOfLikes = 13
+        } else if (id < 101 && id % 17 == 0){
+            numberOfLikes = 3
+        } else if (id < 101 && id % 19 == 0){
+            numberOfLikes = 1
+        } else if (id > 100){
+            numberOfLikes = 0
+        } else{
+            numberOfLikes = 36
+        }
+
+        if (compoundButton.isChecked){
+            numberOfLikes++
+
+            if (id >100){
+                likeCounter.visibility = View.VISIBLE
+                likeIcon.visibility = View.VISIBLE
+            }
+
+            likeCounter.text = numberOfLikes.toString()
+            likeIcon.setColorFilter(resources.getColor(R.color.blue))
+            likeButton.setTextColor(resources.getColor(R.color.blue))
+        }else{
+
+            if (id >100){
+                likeCounter.visibility = View.INVISIBLE
+                likeIcon.visibility = View.INVISIBLE
+            }
+
+            likeCounter.text = numberOfLikes.toString()
+            likeIcon.setColorFilter(resources.getColor(R.color.black))
+            likeButton.setTextColor(resources.getColor(R.color.black))
+        }
     }
 
     override fun onBackPressed() {

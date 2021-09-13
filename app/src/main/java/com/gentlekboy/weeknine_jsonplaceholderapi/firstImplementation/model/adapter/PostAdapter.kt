@@ -90,70 +90,64 @@ class PostAdapter(
         when(userId){
             1 -> {
                 holder.profileImage.setImageResource(R.drawable.user_1)
-                holder.profileName.text = "Peter Akam"
-                holder.bio.text = "CEO at Facebook"
+                holder.profileName.text = context.getString(R.string.peter)
+                holder.bio.text = context.getString(R.string.peter_mail)
             }
             2 -> {
                 holder.profileImage.setImageResource(R.drawable.user_2)
-                holder.profileName.text = "Benjamin Obetta"
-                holder.bio.text = "JavaScript Developer"
+                holder.profileName.text = context.getString(R.string.ben)
+                holder.bio.text = context.getString(R.string.ben_mail)
             }
             3 -> {
                 holder.profileImage.setImageResource(R.drawable.user_3)
-                holder.profileName.text = "Anthony Idoko"
-                holder.bio.text = "Android Developer at Pako.com"
+                holder.profileName.text = context.getString(R.string.tony)
+                holder.bio.text = context.getString(R.string.tony_mail)
             }
             4 -> {
                 holder.profileImage.setImageResource(R.drawable.user_4)
-                holder.profileName.text = "Johnson Oyesina"
-                holder.bio.text = "DevOps Engineer at LinkedIn"
+                holder.profileName.text = context.getString(R.string.johnson)
+                holder.bio.text = context.getString(R.string.johnson_mail)
             }
             5 -> {
                 holder.profileImage.setImageResource(R.drawable.user_5)
-                holder.profileName.text = "Emmanuel Oruminighen"
-                holder.bio.text = "Lead Software Engineer at Google"
+                holder.profileName.text = context.getString(R.string.emmanuel)
+                holder.bio.text = context.getString(R.string.emmanuel_mail)
             }
             6 -> {
                 holder.profileImage.setImageResource(R.drawable.user_6)
-                holder.profileName.text = "John Doe"
-                holder.bio.text = "AWS Engineer at Microsoft"
+                holder.profileName.text = context.getString(R.string.john)
+                holder.bio.text = context.getString(R.string.john_mail)
             }
             7 -> {
                 holder.profileImage.setImageResource(R.drawable.user_7)
                 holder.profileName.text = context.getString(R.string.chinenye)
-                holder.bio.text = context.getString(R.string.chinenye_bio)
+                holder.bio.text = context.getString(R.string.chinenye_email)
             }
             8 -> {
                 holder.profileImage.setImageResource(R.drawable.user_8)
-                holder.profileName.text = "Jennifer Santos"
-                holder.bio.text = "Junior Web Developer at Tesla"
+                holder.profileName.text = context.getString(R.string.jennifer)
+                holder.bio.text = context.getString(R.string.jennifer_mail)
             }
             9 -> {
                 holder.profileImage.setImageResource(R.drawable.user_9)
-                holder.profileName.text = "Joe Davids"
-                holder.bio.text = "Software Developer | React Native"
+                holder.profileName.text = context.getString(R.string.joe)
+                holder.bio.text = context.getString(R.string.joe_mail)
             }
             10 -> {
                 holder.profileImage.setImageResource(R.drawable.user_10)
-                holder.profileName.text = "Cassidy Banks"
-                holder.bio.text = "UI/UX Engineer at Flutterwave"
+                holder.profileName.text = context.getString(R.string.cassidy)
+                holder.bio.text = context.getString(R.string.cassidy_mail)
             }
             else -> {
                 holder.profileImage.setImageResource(R.drawable.my_image)
                 holder.profileName.text = context.getString(R.string.kufre_udoh)
-                holder.bio.text = context.getString(R.string.software_engineer_at_google)
+                holder.bio.text = context.getString(R.string.kufre_email)
             }
         }
 
         //Set on click listener on the share button to share post
         holder.shareButton.setOnClickListener {
-            val intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, bodyOfPost)
-                type = "text/plain"
-            }
-
-            startActivity(context, Intent.createChooser(intent, "Share via"), bundleOf())
+            onclickPostItem.sharePost(position, bodyOfPost)
         }
 
         //Set onclick listener on item view
@@ -168,52 +162,14 @@ class PostAdapter(
 
         //Set a click listener on the like button
         holder.likeButton.setOnCheckedChangeListener { compoundButton, _ ->
-            var numberOfLikes: Int
-
-            if (id < 101 && id % 2 == 0){
-                numberOfLikes = 6
-            } else if (id < 101 && id % 3 == 0){
-                numberOfLikes = 12
-            } else if (id < 101 && id % 5 == 0){
-                numberOfLikes = 8
-            } else if (id < 101 && id % 7 == 0){
-                numberOfLikes = 14
-            } else if (id < 101 && id % 11 == 0){
-                numberOfLikes = 2
-            } else if (id < 101 && id % 13 == 0){
-                numberOfLikes = 13
-            } else if (id < 101 && id % 17 == 0){
-                numberOfLikes = 3
-            } else if (id < 101 && id % 19 == 0){
-                numberOfLikes = 1
-            } else if (id > 100){
-                numberOfLikes = 0
-            } else{
-                numberOfLikes = 36
-            }
-
-            if (compoundButton.isChecked){
-                numberOfLikes++
-
-                if (id >100){
-                    holder.likeCounter.visibility = View.VISIBLE
-                    holder.likeIcon.visibility = View.VISIBLE
-                }
-
-                holder.likeCounter.text = numberOfLikes.toString()
-                holder.likeIcon.setColorFilter(context.resources.getColor(R.color.blue))
-                holder.likeButton.setTextColor(context.resources.getColor(R.color.blue))
-            }else{
-
-                if (id >100){
-                    holder.likeCounter.visibility = View.INVISIBLE
-                    holder.likeIcon.visibility = View.INVISIBLE
-                }
-
-                holder.likeCounter.text = numberOfLikes.toString()
-                holder.likeIcon.setColorFilter(context.resources.getColor(R.color.black))
-                holder.likeButton.setTextColor(context.resources.getColor(R.color.black))
-            }
+            onclickPostItem.checkLikeButton(
+                position,
+                id,
+                compoundButton,
+                holder.likeCounter,
+                holder.likeIcon,
+                holder.likeButton
+            )
         }
     }
 

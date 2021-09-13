@@ -16,11 +16,14 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.MainActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityPostBinding
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.adapter.OnclickPostItem
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.adapter.PostAdapter
@@ -32,6 +35,7 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.S
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.viewModel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.viewModel.MainViewModelFactory
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.data.posts.MvcPostItems
 
 class PostActivity : AppCompatActivity(), OnclickPostItem {
     private lateinit var connectivityLiveData: ConnectivityLiveData
@@ -43,12 +47,12 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     private lateinit var reversedListOfPosts: MutableList<PostItems>
     private lateinit var listOfPosts: MutableList<PostItems>
     private lateinit var response: Posts
-    private lateinit var newPostBody: String
     private val linearLayoutManager = LinearLayoutManager(this)
 
     //Instantiate variables
     private val repository = Repository()
     private val viewModelFactory = MainViewModelFactory(repository)
+    private var newPostBody: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,20 +62,21 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         //Initialize input method manager
         connectivityLiveData = ConnectivityLiveData(application)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        newPostBody = intent.getStringExtra("newPostBody")
 
         setUpRecyclerViewAdapter()
 
-        //Add a new post when the add post button is clicked
-        binding.addPostButton.setOnClickListener {
-            makeAPost()
+        //Navigate to add post activity
+        binding.view.setOnClickListener {
+            startActivity(Intent(this, AddActivity::class.java))
         }
 
-        //Set focus on edit text and open keyboard when edit text container is clicked
-        binding.editTextContainer.setOnClickListener {
-            binding.addPostEditText.requestFocus()
-            inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
+        //Navigate to add post activity
+        binding.fab.setOnClickListener {
+            startActivity(Intent(this, AddActivity::class.java))
         }
 
+        makeAPostRequest()
         observeNetworkChanges()
         floatingActionButtonVisibility()
         filterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
@@ -94,18 +99,19 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     }
 
     //This function makes a post request and adds new post to the recycler view
-    private fun makeAPost(){
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        newPostBody = binding.addPostEditText.text.toString().trim()
+    private fun makeAPostRequest(){
         val id = listOfPosts.size + 1
+        val postItems = newPostBody?.let { PostItems(it, id, "Kufre's Post", 11) }
 
-        if (newPostBody.isNotEmpty()){
-            viewModel.makeAPostToApi(11, id, "Kufre's Post", newPostBody)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        if (newPostBody?.isNotEmpty() == true){
+            viewModel.makeAPostToApi(11, id, "Kufre's Post", newPostBody!!)
             viewModel.pushPost2.observe(this, {
-
                 if (it.isSuccessful){
-                    addNewPostToRecyclerView(newPostBody, id)
-                    Toast.makeText(this, "Post sent!.", Toast.LENGTH_LONG).show()
+                    if (postItems != null) {
+                        addNewPostToRecyclerView(postItems)
+                        Toast.makeText(this, "Post sent!.", Toast.LENGTH_LONG).show()
+                    }
                 }else{
                     Log.d("GKB", "sendPostToServer: ${it.code()}")
                     Log.d("GKB", "sendPostToServer: ${it.errorBody()}")
@@ -116,17 +122,10 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     }
 
     //This function adds new post to the recycler view
-    private fun addNewPostToRecyclerView(newPostBody: String, id: Int){
-        val postItems = PostItems(newPostBody, id, "Kufre's Post", 11)
+    private fun addNewPostToRecyclerView(postItems: PostItems){
         listOfPosts.add(postItems)
         copyOfListOfPosts.add(postItems)
         postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
-
-        binding.addPostEditText.text = null
-        binding.addPostEditText.clearFocus()
-
-        //Hide keyboard after clicking the comment button
-        inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
     }
 
     //This function fetches posts and displays them on the UI
@@ -210,6 +209,65 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         intent.putExtra("userId", userId)
         startActivity(intent)
         Toast.makeText(this, "$id", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun sharePost(position: Int, bodyOfPost: String) {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, bodyOfPost)
+            type = "text/plain"
+        }
+
+        ContextCompat.startActivity(this, Intent.createChooser(intent, "Share via"), bundleOf())
+    }
+
+    override fun checkLikeButton(position: Int, id: Int, compoundButton: CompoundButton, likeCounter: TextView, likeIcon: ImageView, likeButton: ToggleButton) {
+        var numberOfLikes: Int
+
+        if (id < 101 && id % 2 == 0){
+            numberOfLikes = 6
+        } else if (id < 101 && id % 3 == 0){
+            numberOfLikes = 12
+        } else if (id < 101 && id % 5 == 0){
+            numberOfLikes = 8
+        } else if (id < 101 && id % 7 == 0){
+            numberOfLikes = 14
+        } else if (id < 101 && id % 11 == 0){
+            numberOfLikes = 2
+        } else if (id < 101 && id % 13 == 0){
+            numberOfLikes = 13
+        } else if (id < 101 && id % 17 == 0){
+            numberOfLikes = 3
+        } else if (id < 101 && id % 19 == 0){
+            numberOfLikes = 1
+        } else if (id > 100){
+            numberOfLikes = 0
+        } else{
+            numberOfLikes = 36
+        }
+
+        if (compoundButton.isChecked){
+            numberOfLikes++
+
+            if (id >100){
+                likeCounter.visibility = View.VISIBLE
+                likeIcon.visibility = View.VISIBLE
+            }
+
+            likeCounter.text = numberOfLikes.toString()
+            likeIcon.setColorFilter(resources.getColor(R.color.blue))
+            likeButton.setTextColor(resources.getColor(R.color.blue))
+        }else{
+
+            if (id >100){
+                likeCounter.visibility = View.INVISIBLE
+                likeIcon.visibility = View.INVISIBLE
+            }
+
+            likeCounter.text = numberOfLikes.toString()
+            likeIcon.setColorFilter(resources.getColor(R.color.black))
+            likeButton.setTextColor(resources.getColor(R.color.black))
+        }
     }
 
     override fun onBackPressed() {
