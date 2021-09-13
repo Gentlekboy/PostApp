@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeekNineJsonPlaceholderAPI">
         <activity
+            android:name=".firstImplementation.ui.posts.AddActivity"
+            android:exported="true" />
+        <activity
             android:name=".secondImplementation.ui.splashScreen.MvcWelcomeActivity"
             android:exported="true" />
         <activity
