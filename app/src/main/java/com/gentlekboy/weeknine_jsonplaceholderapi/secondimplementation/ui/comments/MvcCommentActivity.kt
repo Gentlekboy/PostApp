@@ -3,25 +3,31 @@ package com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.ui.comme
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityCommentBinding
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.comments.PopulatePostDetails.populatePostDetailsInCommentActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.PostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.model.adapter.MvcCommentAdapter
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.model.api.MvcRetrofit
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.model.data.comments.MvcComments
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.model.data.comments.MvcCommentsItem
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.ui.posts.MvcPostActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import kotlin.properties.Delegates
 
 class MvcCommentActivity : AppCompatActivity() {
+    private lateinit var connectivityLiveData: ConnectivityLiveData
     private lateinit var binding: ActivityCommentBinding
     private lateinit var commentAdapter: MvcCommentAdapter
     private lateinit var inputMethodManager: InputMethodManager
@@ -41,6 +47,7 @@ class MvcCommentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //Initialize required variables
+        connectivityLiveData = ConnectivityLiveData(application)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         numberOfComments = 5
 
@@ -70,7 +77,7 @@ class MvcCommentActivity : AppCompatActivity() {
 
         //Set on click listener on the back button to go back to previous activity
         binding.button.setOnClickListener {
-            onBackPressed()
+            startActivity(Intent(this, MvcPostActivity::class.java))
         }
 
         //Add a comment when the comment button is clicked
@@ -78,8 +85,14 @@ class MvcCommentActivity : AppCompatActivity() {
             addNewComment()
         }
 
-        fetchComments()
+        observeNetworkChanges()
         populatePostDetailsInCommentActivity(binding.postBody, postBody, userId, binding.profileImage, binding.profileName, binding.profileBio, this)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        startActivity(Intent(this, MvcPostActivity::class.java))
     }
 
     //This function gets data from the previous activity using intents
@@ -210,6 +223,25 @@ class MvcCommentActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeNetworkChanges(){
+        connectivityLiveData.observe(this, { isAvailable ->
+            when(isAvailable){
+                true -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.loadingComments.visibility = View.VISIBLE
+                    fetchComments()
+                }
+                false -> {
+                    binding.button.visibility = View.GONE
+                    binding.addCommentSection.visibility = View.GONE
+                    binding.nestedScrollview.visibility = View.GONE
+                    Log.d("GKB", "observeNetworkState: Network Unavailable")
+                    Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
     //This function fetches comments based on the post id selected
     private fun fetchComments(){
         val connectedRetrofit = MvcRetrofit.api.getComments(postId)
@@ -218,6 +250,7 @@ class MvcCommentActivity : AppCompatActivity() {
                 val fetchedComments = response.body()
 
                 commentAdapter.addComments(fetchedComments)
+                displayAppLayouts()
                 Log.d("GKB", "onFailure: $fetchedComments")
             }
 
@@ -225,5 +258,19 @@ class MvcCommentActivity : AppCompatActivity() {
                 Log.d("GKB", "onFailure: ${t.message}")
             }
         })
+    }
+
+    //This function hides starting views and displays main layouts
+    private fun displayAppLayouts(){
+        val handler = Handler()
+        handler.postDelayed({
+            if (listOfComments.isNotEmpty()){
+                binding.progressBar.visibility = View.GONE
+                binding.loadingComments.visibility = View.GONE
+                binding.button.visibility = View.VISIBLE
+                binding.addCommentSection.visibility = View.VISIBLE
+                binding.nestedScrollview.visibility = View.VISIBLE
+            }
+        }, 100)
     }
 }

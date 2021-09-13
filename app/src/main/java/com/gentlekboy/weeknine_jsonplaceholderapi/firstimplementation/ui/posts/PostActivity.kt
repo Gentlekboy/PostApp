@@ -28,10 +28,12 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.model.data
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.repository.Repository
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.comments.CommentActivity
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.SearchViewInPost.filterPostsWithSearchView
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.viewmodel.MainViewModelFactory
 
 class PostActivity : AppCompatActivity(), OnclickPostItem {
+    private lateinit var connectivityLiveData: ConnectivityLiveData
     private lateinit var binding: ActivityPostBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var postAdapter: PostAdapter
@@ -53,6 +55,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         setContentView(binding.root)
 
         //Initialize input method manager
+        connectivityLiveData = ConnectivityLiveData(application)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         setUpRecyclerViewAdapter()
@@ -68,9 +71,8 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
             inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
         }
 
-        fetchPosts()
+        observeNetworkChanges()
         floatingActionButtonVisibility()
-        displayAppLayouts()
         filterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
 
@@ -127,6 +129,25 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     }
 
     //This function fetches posts and displays them on the UI
+    private fun observeNetworkChanges(){
+        connectivityLiveData.observe(this, { isAvailable ->
+            when(isAvailable){
+                true -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.loadingPosts.visibility = View.VISIBLE
+                    fetchPosts()
+                }
+                false -> {
+                    binding.appName.visibility = View.GONE
+                    binding.searchView.visibility = View.GONE
+                    binding.nestedScrollview.visibility = View.GONE
+                    Log.d("GKB", "observeNetworkState: Network Unavailable")
+                    Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
     private fun fetchPosts(){
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.fetchPosts()
@@ -137,7 +158,10 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
                 postAdapter.addPosts(response)
                 copyOfListOfPosts.addAll(listOfPosts)
 
+                displayAppLayouts()
+
             }else{
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                 Log.d("GKB", "onCreate: ${it.errorBody()}")
             }
         })
@@ -161,13 +185,13 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         val handler = Handler()
         handler.postDelayed({
             if (reversedListOfPosts.isNotEmpty()){
-                binding.nameOfApp.visibility = View.GONE
-                binding.implementationType.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+                binding.loadingPosts.visibility = View.GONE
                 binding.appName.visibility = View.VISIBLE
                 binding.searchView.visibility = View.VISIBLE
                 binding.nestedScrollview.visibility = View.VISIBLE
             }
-        }, 2000)
+        }, 500)
     }
 
     //This function handles clicking items on the recyclerview and passing data to the next activity

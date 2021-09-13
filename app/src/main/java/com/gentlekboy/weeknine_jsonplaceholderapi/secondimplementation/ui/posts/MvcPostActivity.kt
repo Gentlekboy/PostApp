@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMvcPostBinding
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.model.adapter.MvcOnclickPostItem
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.model.adapter.MvcPostAdapter
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.model.api.MvcRetrofit
@@ -21,11 +22,10 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.ui.posts.
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.view.ViewTreeObserver
-import android.view.ViewTreeObserver.OnScrollChangedListener
 
 
 class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
+    private lateinit var connectivityLiveData: ConnectivityLiveData
     private lateinit var binding: ActivityMvcPostBinding
     private lateinit var postAdapter: MvcPostAdapter
     private lateinit var inputMethodManager: InputMethodManager
@@ -34,7 +34,7 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
     private lateinit var reversedListOfPosts: MutableList<MvcPostItems>
     private lateinit var listOfPosts: MutableList<MvcPostItems>
     private lateinit var commentResponse: MvcPosts
-    private lateinit var newPostBody: String
+    private var newPostBody: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,29 +42,24 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         setContentView(binding.root)
 
         //Initialize input method manager
+        connectivityLiveData = ConnectivityLiveData(application)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        newPostBody = intent.getStringExtra("newPostBody")
 
         setUpRecyclerViewAdapter()
 
-        //Add a new post when the add post button is clicked
-        binding.addPostButton.setOnClickListener {
-            makeAPostRequest()
+        //Navigate to add post activity
+        binding.view.setOnClickListener {
+            startActivity(Intent(this, MvcAddActivity::class.java))
         }
 
-        //Set focus on edit text and open keyboard when edit text container is clicked
-        binding.editTextContainer.setOnClickListener {
-            binding.addPostEditText.requestFocus()
-            inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
-        }
-
-        //Set focus on edit text and open keyboard when edit text container is clicked
+        //Navigate to add post activity
         binding.fab.setOnClickListener {
-            binding.addPostEditText.requestFocus()
-            inputMethodManager.showSoftInput(binding.addPostEditText, InputMethodManager.SHOW_IMPLICIT)
+            startActivity(Intent(this, MvcAddActivity::class.java))
         }
 
-        fetchPosts()
-        displayAppLayouts()
+        makeAPostRequest()
+        observeNetworkChanges()
         floatingActionButtonVisibility()
         mvcFilterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
@@ -84,28 +79,27 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
 
     //This function makes a post request and adds new post to the recycler view
     private fun makeAPostRequest(){
-        newPostBody = binding.addPostEditText.text.toString().trim()
         val id = listOfPosts.size + 1
-        val postItems = MvcPostItems(newPostBody, id, "Kufre's Post", 11)
+        val postItems = newPostBody?.let { MvcPostItems(it, id, "Kufre's Post", 11) }
 
-        if (newPostBody.isNotEmpty()){
-            val connectedRetrofit = MvcRetrofit.api.makeAPost(postItems)
-            connectedRetrofit.enqueue(object : Callback<MvcPostItems?> {
-                override fun onResponse(call: Call<MvcPostItems?>, response: Response<MvcPostItems?>) {
-                    if (response.isSuccessful){
-                        addNewPostToRecyclerView(postItems)
-                        Toast.makeText(this@MvcPostActivity, "Post sent!.", Toast.LENGTH_LONG).show()
-                    }else{
-                        Log.d("GKB", "sendPostToServer: ${response.code()}")
+        if (newPostBody?.isNotEmpty() == true) {
+            postItems?.let { MvcRetrofit.api.makeAPost(it) }
+                ?.enqueue(object : Callback<MvcPostItems?> {
+                    override fun onResponse(call: Call<MvcPostItems?>, response: Response<MvcPostItems?>) {
+                        if (response.isSuccessful) {
+                            newPostBody?.let { addNewPostToRecyclerView(postItems) }
+                            Toast.makeText(this@MvcPostActivity, "Post sent!.", Toast.LENGTH_LONG).show()
+                        } else {
+                            Log.d("GKB", "sendPostToServer: ${response.code()}")
+                            Toast.makeText(this@MvcPostActivity, "Check your internet and try again.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<MvcPostItems?>, t: Throwable) {
+                        Log.d("GKB", "sendPostToServer: ${t.message}")
                         Toast.makeText(this@MvcPostActivity, "Check your internet and try again.", Toast.LENGTH_SHORT).show()
                     }
-                }
-
-                override fun onFailure(call: Call<MvcPostItems?>, t: Throwable) {
-                    Log.d("GKB", "sendPostToServer: ${t.message}")
-                    Toast.makeText(this@MvcPostActivity, "Check your internet and try again.", Toast.LENGTH_SHORT).show()
-                }
-            })
+                })
         }
     }
 
@@ -114,15 +108,28 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         listOfPosts.add(postItems)
         copyOfListOfPosts.add(postItems)
         postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
-
-        binding.addPostEditText.text = null
-        binding.addPostEditText.clearFocus()
-
-        //Hide keyboard after clicking the comment button
-        inputMethodManager.hideSoftInputFromWindow(binding.addPostEditText.windowToken, 0)
     }
 
     //This function fetches posts and displays them on the UI
+    private fun observeNetworkChanges(){
+        connectivityLiveData.observe(this, { isAvailable ->
+            when(isAvailable){
+                true -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.loadingPosts.visibility = View.VISIBLE
+                    fetchPosts()
+                }
+                false -> {
+                    binding.appName.visibility = View.GONE
+                    binding.searchView.visibility = View.GONE
+                    binding.nestedScrollview.visibility = View.GONE
+                    Log.d("GKB", "observeNetworkState: Network Unavailable")
+                    Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
     private fun fetchPosts(){
         val connectedRetrofit = MvcRetrofit.api.getPost()
         connectedRetrofit.enqueue(object : Callback<MvcPosts?> {
@@ -132,6 +139,7 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
                 if (response.isSuccessful){
                     postAdapter.addPosts(commentResponse)
                     copyOfListOfPosts.addAll(listOfPosts)
+                    displayAppLayouts()
                 }else{
                     Toast.makeText(this@MvcPostActivity, "Something went wrong. Try again!", Toast.LENGTH_SHORT).show()
                     Log.d("GKB", "onResponse: ${response.message()}")
@@ -162,13 +170,13 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         val handler = Handler()
         handler.postDelayed({
             if (reversedListOfPosts.isNotEmpty()){
-                binding.nameOfApp.visibility = View.GONE
-                binding.implementationType.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+                binding.loadingPosts.visibility = View.GONE
                 binding.appName.visibility = View.VISIBLE
                 binding.searchView.visibility = View.VISIBLE
                 binding.nestedScrollview.visibility = View.VISIBLE
             }
-        }, 2000)
+        }, 100)
     }
 
     //This function handles clicking items on the recyclerview and passing data to the next activity

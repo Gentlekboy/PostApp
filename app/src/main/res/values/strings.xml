@@ -51,4 +51,7 @@
     <string name="mvc_implementation">MVC Implementation</string>
     <string name="mvvm_implementation">MVVM Implementation</string>
     <string name="add_a_new_post">Add a new post</string>
+    <string name="_post">Post</string>
+    <string name="loading_comments">Loading comments...</string>
+    <string name="loading_posts">Loading posts</string>
 </resources>
