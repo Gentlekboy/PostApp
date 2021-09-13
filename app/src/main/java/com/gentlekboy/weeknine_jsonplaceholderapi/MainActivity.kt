@@ -4,8 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMainBinding
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstimplementation.ui.posts.PostActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.secondimplementation.ui.posts.MvcPostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.PostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.splashScreen.WelcomeActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.MvcPostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.splashScreen.MvcWelcomeActivity
 
 private lateinit var binding: ActivityMainBinding
 
@@ -17,12 +19,17 @@ class MainActivity : AppCompatActivity() {
 
         //Navigate to the first implementation
         binding.firstImplementationButton.setOnClickListener {
-            startActivity(Intent(this, PostActivity::class.java))
+            startActivity(Intent(this, WelcomeActivity::class.java))
         }
 
         //Navigate to the second implementation
         binding.secondImplementationButton.setOnClickListener {
-            startActivity(Intent(this, MvcPostActivity::class.java))
+            startActivity(Intent(this, MvcWelcomeActivity::class.java))
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }
