@@ -5,3 +5,8 @@
 * you should be able to add new comment.
 * Build a nice UI and the home page should have a search/filter field.
 * You should also have a page to create a new post
+
+![Main Activity](app/src/main/res/drawable/main_activity.png)
+![MVVM Splash Screen](app/src/main/res/drawable/mvvm_splash_screen.png)
+![Post Activity](app/src/main/res/drawable/post_activity.png)
+![Comment Activity](app/src/main/res/drawable/comment_activity.png)
