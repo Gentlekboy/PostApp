@@ -1,14 +1,5 @@
 package com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts
 
-/*
-* Using the endpoints found here https://jsonplaceholder.typicode.com
-* build a simple application that shows a list of post
-* and then a single post page with comments,
-* you should be able to add new comment.
-* Build a nice UI and the home page should have a search/filter field.
-* You should also have a page to create a new post
-* */
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -24,7 +15,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.MainActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityPostBinding
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.adapter.OnclickPostItem
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.adapter.PostAdapter
@@ -32,11 +22,9 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.data
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.data.posts.Posts
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.repository.Repository
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.comments.CommentActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.SearchViewInPost.filterPostsWithSearchView
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.viewModel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.viewModel.MainViewModelFactory
-import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.data.posts.MvcPostItems
 
 class PostActivity : AppCompatActivity(), OnclickPostItem {
     private lateinit var connectivityLiveData: ConnectivityLiveData
@@ -48,7 +36,6 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     private lateinit var reversedListOfPosts: MutableList<PostItems>
     private lateinit var listOfPosts: MutableList<PostItems>
     private lateinit var response: Posts
-    private val linearLayoutManager = LinearLayoutManager(this)
 
     //Instantiate variables
     private val repository = Repository()
@@ -78,9 +65,22 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         }
 
         makeAPostRequest()
-        observeNetworkChanges()
         fetchPosts()
-        floatingActionButtonVisibility()
+        floatingActionButtonVisibility(binding.nestedScrollview, binding.fab)
+        observeNetworkChanges(
+            this,
+            application,
+            this,
+            binding.reloadMessage,
+            binding.connectionLostText,
+            binding.connectionLostImage,
+            binding.progressBar,
+            binding.loadingPosts,
+            reversedListOfPosts,
+            binding.appName,
+            binding.searchView,
+            binding.nestedScrollview
+        )
         filterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
 
@@ -97,7 +97,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         //Set up recyclerview
         binding.postRecyclerview.adapter = postAdapter
         binding.postRecyclerview.setHasFixedSize(true)
-        binding.postRecyclerview.layoutManager = linearLayoutManager
+        binding.postRecyclerview.layoutManager = LinearLayoutManager(this)
     }
 
     //This function makes a post request and adds new post to the recycler view
@@ -130,50 +130,6 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
     }
 
-    //This function fetches posts and displays them on the UI
-    private fun observeNetworkChanges(){
-        connectivityLiveData.observe(this, { isAvailable ->
-            when(isAvailable){
-                true -> {
-                    displayUiWhenNetworkIsAvailable()
-                    displayAppLayouts()
-                }
-                false -> {
-                    displayUiWhenNetworkIsNotAvailable()
-                }
-            }
-        })
-    }
-
-    private fun displayUiWhenNetworkIsAvailable(){
-        binding.reloadMessage.visibility = View.GONE
-        binding.connectionLostImage.setColorFilter(resources.getColor(R.color.blue))
-        binding.connectionLostText.text = getString(R.string.connection_restored)
-
-        val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            binding.progressBar.visibility = View.VISIBLE
-            binding.loadingPosts.visibility = View.VISIBLE
-            binding.connectionLostImage.visibility = View.GONE
-            binding.connectionLostText.visibility = View.GONE
-        }, 800)
-    }
-
-    private fun displayUiWhenNetworkIsNotAvailable(){
-        binding.connectionLostImage.setColorFilter(resources.getColor(R.color.gray))
-        binding.connectionLostText.text = getString(R.string.connection_lost)
-
-        binding.appName.visibility = View.GONE
-        binding.searchView.visibility = View.GONE
-        binding.nestedScrollview.visibility = View.GONE
-
-        binding.connectionLostImage.visibility = View.VISIBLE
-        binding.connectionLostText.visibility = View.VISIBLE
-        binding.reloadMessage.visibility = View.VISIBLE
-
-        Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
-    }
-
     private fun fetchPosts(){
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.fetchPosts()
@@ -191,19 +147,6 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
                 Log.d("GKB", "onCreate: ${it.errorBody()}")
             }
         })
-    }
-
-    //Listen to scroll and display or hide floating action button
-    private fun floatingActionButtonVisibility(){
-        var previousScrollY = 0
-        binding.nestedScrollview.viewTreeObserver.addOnScrollChangedListener {
-            if (binding.nestedScrollview.scrollY > previousScrollY && binding.fab.visibility != View.VISIBLE) {
-                binding.fab.show()
-            } else if (binding.nestedScrollview.scrollY < previousScrollY && binding.fab.visibility == View.VISIBLE) {
-                binding.fab.hide()
-            }
-            previousScrollY = binding.nestedScrollview.scrollY
-        }
     }
 
     //This function hides starting views and displays main layouts
@@ -249,52 +192,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     }
 
     override fun checkLikeButton(position: Int, id: Int, compoundButton: CompoundButton, likeCounter: TextView, likeIcon: ImageView, likeButton: ToggleButton) {
-        var numberOfLikes: Int
-
-        if (id < 101 && id % 2 == 0){
-            numberOfLikes = 6
-        } else if (id < 101 && id % 3 == 0){
-            numberOfLikes = 12
-        } else if (id < 101 && id % 5 == 0){
-            numberOfLikes = 8
-        } else if (id < 101 && id % 7 == 0){
-            numberOfLikes = 14
-        } else if (id < 101 && id % 11 == 0){
-            numberOfLikes = 2
-        } else if (id < 101 && id % 13 == 0){
-            numberOfLikes = 13
-        } else if (id < 101 && id % 17 == 0){
-            numberOfLikes = 3
-        } else if (id < 101 && id % 19 == 0){
-            numberOfLikes = 1
-        } else if (id > 100){
-            numberOfLikes = 0
-        } else{
-            numberOfLikes = 36
-        }
-
-        if (compoundButton.isChecked){
-            numberOfLikes++
-
-            if (id >100){
-                likeCounter.visibility = View.VISIBLE
-                likeIcon.visibility = View.VISIBLE
-            }
-
-            likeCounter.text = numberOfLikes.toString()
-            likeIcon.setColorFilter(resources.getColor(R.color.blue))
-            likeButton.setTextColor(resources.getColor(R.color.blue))
-        }else{
-
-            if (id >100){
-                likeCounter.visibility = View.INVISIBLE
-                likeIcon.visibility = View.INVISIBLE
-            }
-
-            likeCounter.text = numberOfLikes.toString()
-            likeIcon.setColorFilter(resources.getColor(R.color.black))
-            likeButton.setTextColor(resources.getColor(R.color.black))
-        }
+        clickLikeButtonActions(id, compoundButton, likeCounter, likeIcon, likeButton, this)
     }
 
     override fun onBackPressed() {
