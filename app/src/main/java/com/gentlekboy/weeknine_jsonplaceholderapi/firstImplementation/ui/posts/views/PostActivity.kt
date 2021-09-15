@@ -1,4 +1,4 @@
-package com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts
+package com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.views
 
 import android.content.Context
 import android.content.Intent
@@ -22,6 +22,10 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.data
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.data.posts.Posts
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.repository.Repository
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.comments.CommentActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.clickLikeButtonActions
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.filterPostsWithSearchView
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.floatingActionButtonVisibility
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.observeNetworkChanges
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.viewModel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.viewModel.MainViewModelFactory

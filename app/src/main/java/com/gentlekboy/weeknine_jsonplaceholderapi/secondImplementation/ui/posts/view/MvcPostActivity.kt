@@ -1,4 +1,4 @@
-package com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts
+package com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.view
 
 import android.content.Context
 import android.content.Intent
@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.MainActivity
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMvcPostBinding
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.MvcObserveNetworkChanges
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.floatingActionButtonVisibility
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.adapter.MvcOnclickPostItem
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.adapter.MvcPostAdapter
@@ -23,7 +25,7 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.api
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.data.posts.MvcPostItems
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.data.posts.MvcPosts
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.comments.MvcCommentActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.MvcSearchViewInPost.mvcFilterPostsWithSearchView
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.mvcFilterPostsWithSearchView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -64,9 +66,22 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         }
 
         makeAPostRequest()
-        observeNetworkChanges()
+        MvcObserveNetworkChanges(
+            this,
+            application,
+            this,
+            binding.reloadMessage,
+            binding.connectionLostText,
+            binding.connectionLostImage,
+            binding.progressBar,
+            binding.loadingPosts,
+            reversedListOfPosts,
+            binding.appName,
+            binding.searchView,
+            binding.nestedScrollview
+        )
         fetchPosts()
-        floatingActionButtonVisibility()
+        floatingActionButtonVisibility(binding.nestedScrollview, binding.fab)
         mvcFilterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
 
@@ -116,50 +131,6 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
         postAdapter.notifyItemInserted(listOfPosts.indexOf(listOfPosts[0]))
     }
 
-    //This function fetches posts and displays them on the UI
-    private fun observeNetworkChanges(){
-        connectivityLiveData.observe(this, { isAvailable ->
-            when(isAvailable){
-                true -> {
-                    displayUiWhenNetworkIsAvailable()
-                    displayAppLayouts()
-                }
-                false -> {
-                    displayUiWhenNetworkIsNotAvailable()
-                }
-            }
-        })
-    }
-
-    private fun displayUiWhenNetworkIsAvailable(){
-        binding.reloadMessage.visibility = View.GONE
-        binding.connectionLostImage.setColorFilter(resources.getColor(R.color.blue))
-        binding.connectionLostText.text = getString(R.string.connection_restored)
-
-        val handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            binding.progressBar.visibility = View.VISIBLE
-            binding.loadingPosts.visibility = View.VISIBLE
-            binding.connectionLostImage.visibility = View.GONE
-            binding.connectionLostText.visibility = View.GONE
-        }, 800)
-    }
-
-    private fun displayUiWhenNetworkIsNotAvailable(){
-        binding.connectionLostImage.setColorFilter(resources.getColor(R.color.gray))
-        binding.connectionLostText.text = getString(R.string.connection_lost)
-
-        binding.appName.visibility = View.GONE
-        binding.searchView.visibility = View.GONE
-        binding.nestedScrollview.visibility = View.GONE
-
-        binding.connectionLostImage.visibility = View.VISIBLE
-        binding.connectionLostText.visibility = View.VISIBLE
-        binding.reloadMessage.visibility = View.VISIBLE
-
-        Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
-    }
-
     private fun fetchPosts(){
         val connectedRetrofit = MvcRetrofit.api.getPost()
         connectedRetrofit.enqueue(object : Callback<MvcPosts?> {
@@ -180,19 +151,6 @@ class MvcPostActivity : AppCompatActivity(), MvcOnclickPostItem {
                 Log.d("GKB", "onFailure: ${t.message}")
             }
         })
-    }
-
-    //Listen to scroll and display or hide floating action button
-    private fun floatingActionButtonVisibility(){
-        var previousScrollY = 0
-        binding.nestedScrollview.viewTreeObserver.addOnScrollChangedListener {
-            if (binding.nestedScrollview.scrollY > previousScrollY && binding.fab.visibility != View.VISIBLE) {
-                binding.fab.show()
-            } else if (binding.nestedScrollview.scrollY < previousScrollY && binding.fab.visibility == View.VISIBLE) {
-                binding.fab.hide()
-            }
-            previousScrollY = binding.nestedScrollview.scrollY
-        }
     }
 
     //This function hides starting views and displays main layouts

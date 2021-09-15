@@ -14,13 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMvcCommentBinding
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.comments.PopulatePostDetails.populatePostDetailsInCommentActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.comments.populatePostDetailsInCommentActivity
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.adapter.MvcCommentAdapter
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.api.MvcRetrofit
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.data.comments.MvcComments
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.data.comments.MvcCommentsItem
-import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.MvcPostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.view.MvcPostActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

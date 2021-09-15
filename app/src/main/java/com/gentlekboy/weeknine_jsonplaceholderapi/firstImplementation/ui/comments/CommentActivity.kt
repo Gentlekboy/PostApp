@@ -2,7 +2,6 @@ package com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.commen
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +10,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
@@ -18,8 +18,7 @@ import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityCommentBin
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.adapter.CommentAdapter
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.model.data.comments.CommentItems
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.repository.Repository
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.comments.PopulatePostDetails.populatePostDetailsInCommentActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.PostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.views.PostActivity
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.viewModel.MainViewModel
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.viewModel.MainViewModelFactory
@@ -99,7 +98,6 @@ class CommentActivity : AppCompatActivity() {
         super.onBackPressed()
 
         startActivity(Intent(this, PostActivity::class.java))
-        finish()
     }
 
     //This function gets data from the previous activity using intents

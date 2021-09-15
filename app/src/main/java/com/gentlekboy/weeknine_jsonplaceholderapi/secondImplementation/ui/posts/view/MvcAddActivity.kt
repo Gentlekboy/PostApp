@@ -1,19 +1,19 @@
-package com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts
+package com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.view
 
 import android.content.Intent
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityAddBinding
-import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.MvcPostActivity
+import android.os.Bundle
+import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMvcAddBinding
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.view.MvcPostActivity
 
-private lateinit var binding: ActivityAddBinding
+private lateinit var binding: ActivityMvcAddBinding
 
-class AddActivity : AppCompatActivity() {
+class MvcAddActivity : AppCompatActivity() {
     private lateinit var newPostBody: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddBinding.inflate(layoutInflater)
+        binding = ActivityMvcAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.button.setOnClickListener {
@@ -24,14 +24,14 @@ class AddActivity : AppCompatActivity() {
     private fun getNewPost(){
         newPostBody = binding.addPostEditText.text.toString()
 
-        val intent = Intent(this, PostActivity::class.java)
+        val intent = Intent(this, MvcPostActivity::class.java)
         intent.putExtra("newPostBody", newPostBody)
         startActivity(intent)
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this, PostActivity::class.java))
+        startActivity(Intent(this, MvcPostActivity::class.java))
         finish()
     }
 }

@@ -4,9 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMainBinding
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.PostActivity
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.splashScreen.WelcomeActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.MvcPostActivity
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.splashScreen.MvcWelcomeActivity
 
 private lateinit var binding: ActivityMainBinding

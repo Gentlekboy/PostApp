@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeekNineJsonPlaceholderAPI">
         <activity
-            android:name=".firstImplementation.ui.posts.AddActivity"
+            android:name=".firstImplementation.ui.posts.views.AddActivity"
             android:exported="true" />
         <activity
             android:name=".secondImplementation.ui.splashScreen.MvcWelcomeActivity"
@@ -22,19 +22,19 @@
             android:name=".firstImplementation.ui.splashScreen.WelcomeActivity"
             android:exported="true" />
         <activity
-            android:name=".secondImplementation.ui.posts.MvcAddActivity"
+            android:name=".secondImplementation.ui.posts.view.MvcAddActivity"
             android:exported="true" />
         <activity
             android:name=".secondImplementation.ui.comments.MvcCommentActivity"
             android:exported="true" />
         <activity
-            android:name=".secondImplementation.ui.posts.MvcPostActivity"
+            android:name=".secondImplementation.ui.posts.view.MvcPostActivity"
             android:exported="true" />
         <activity
             android:name=".firstImplementation.ui.comments.CommentActivity"
             android:exported="true" />
         <activity
-            android:name=".firstImplementation.ui.posts.PostActivity"
+            android:name=".firstImplementation.ui.posts.views.PostActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

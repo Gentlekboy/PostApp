@@ -5,8 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMvcWelcomeBinding
-import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.posts.PostActivity
-import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.MvcPostActivity
+import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.ui.posts.view.MvcPostActivity
 
 private lateinit var binding: ActivityMvcWelcomeBinding
 
