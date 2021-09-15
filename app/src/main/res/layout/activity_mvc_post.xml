@@ -44,9 +44,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.48" />
 
     <TextView
         android:id="@+id/loading_posts"
@@ -58,17 +58,55 @@
         app:layout_constraintStart_toStartOf="@+id/progress_bar"
         app:layout_constraintTop_toBottomOf="@+id/progress_bar" />
 
+    <ImageView
+        android:id="@+id/connection_lost_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="invisible"
+        android:contentDescription="@string/no_internet_connection"
+        android:src="@drawable/ic_baseline_wifi_off_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.47" />
+
+    <TextView
+        android:id="@+id/connection_lost_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connection_lost"
+        android:visibility="invisible"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/connection_lost_image"
+        app:layout_constraintStart_toStartOf="@+id/connection_lost_image"
+        app:layout_constraintTop_toBottomOf="@+id/connection_lost_image" />
+
+    <TextView
+        android:id="@+id/reload_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="@string/we_ll_reload_the_page_as_soon_as_connection_is_restored"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/connection_lost_text"
+        app:layout_constraintStart_toStartOf="@+id/connection_lost_text"
+        app:layout_constraintTop_toBottomOf="@+id/connection_lost_text" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
+        android:contentDescription="@string/add_a_new_post"
         android:src="@drawable/ic_baseline_post_add_24"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/add_a_new_post" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scrollview"
@@ -127,8 +165,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:text="@string/what_do_you_want_to_talk_about"
-                android:textSize="16sp"
                 android:textColor="@color/gray"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="@+id/view"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="0.0"

@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -78,6 +79,7 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
 
         makeAPostRequest()
         observeNetworkChanges()
+        fetchPosts()
         floatingActionButtonVisibility()
         filterPostsWithSearchView(binding.searchView, inputMethodManager, listOfPosts, copyOfListOfPosts, postAdapter)
     }
@@ -133,19 +135,43 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
         connectivityLiveData.observe(this, { isAvailable ->
             when(isAvailable){
                 true -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.loadingPosts.visibility = View.VISIBLE
-                    fetchPosts()
+                    displayUiWhenNetworkIsAvailable()
+                    displayAppLayouts()
                 }
                 false -> {
-                    binding.appName.visibility = View.GONE
-                    binding.searchView.visibility = View.GONE
-                    binding.nestedScrollview.visibility = View.GONE
-                    Log.d("GKB", "observeNetworkState: Network Unavailable")
-                    Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
+                    displayUiWhenNetworkIsNotAvailable()
                 }
             }
         })
+    }
+
+    private fun displayUiWhenNetworkIsAvailable(){
+        binding.reloadMessage.visibility = View.GONE
+        binding.connectionLostImage.setColorFilter(resources.getColor(R.color.blue))
+        binding.connectionLostText.text = getString(R.string.connection_restored)
+
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            binding.progressBar.visibility = View.VISIBLE
+            binding.loadingPosts.visibility = View.VISIBLE
+            binding.connectionLostImage.visibility = View.GONE
+            binding.connectionLostText.visibility = View.GONE
+        }, 800)
+    }
+
+    private fun displayUiWhenNetworkIsNotAvailable(){
+        binding.connectionLostImage.setColorFilter(resources.getColor(R.color.gray))
+        binding.connectionLostText.text = getString(R.string.connection_lost)
+
+        binding.appName.visibility = View.GONE
+        binding.searchView.visibility = View.GONE
+        binding.nestedScrollview.visibility = View.GONE
+
+        binding.connectionLostImage.visibility = View.VISIBLE
+        binding.connectionLostText.visibility = View.VISIBLE
+        binding.reloadMessage.visibility = View.VISIBLE
+
+        Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
     }
 
     private fun fetchPosts(){
@@ -182,16 +208,17 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
 
     //This function hides starting views and displays main layouts
     private fun displayAppLayouts(){
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
             if (reversedListOfPosts.isNotEmpty()){
                 binding.progressBar.visibility = View.GONE
                 binding.loadingPosts.visibility = View.GONE
+
                 binding.appName.visibility = View.VISIBLE
                 binding.searchView.visibility = View.VISIBLE
                 binding.nestedScrollview.visibility = View.VISIBLE
             }
-        }, 500)
+        }, 1500)
     }
 
     //This function handles clicking items on the recyclerview and passing data to the next activity
@@ -273,6 +300,5 @@ class PostActivity : AppCompatActivity(), OnclickPostItem {
     override fun onBackPressed() {
         super.onBackPressed()
         startActivity(Intent(this, MainActivity::class.java))
-        finish()
     }
 }

@@ -84,4 +84,8 @@
     <string name="kufre_email">kufreabasi.udoh@decagon.dev</string>
     <string name="profile_image_desc">profile image</string>
     <string name="reply">Reply</string>
+    <string name="connection_lost">Connection lost</string>
+    <string name="we_ll_reload_the_page_as_soon_as_connection_is_restored">We\'ll reload the page as soon as connection is restored</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="connection_restored">Connection restored!</string>
 </resources>
