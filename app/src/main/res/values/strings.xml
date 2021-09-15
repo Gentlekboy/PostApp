@@ -82,4 +82,6 @@
     <string name="joe_mail">joe.davids@decagon.dev</string>
     <string name="cassidy_mail">cassidy.banks@decagon.dev</string>
     <string name="kufre_email">kufreabasi.udoh@decagon.dev</string>
+    <string name="profile_image_desc">profile image</string>
+    <string name="reply">Reply</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -12,7 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.gentlekboy.weeknine_jsonplaceholderapi.R
-import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityCommentBinding
+import com.gentlekboy.weeknine_jsonplaceholderapi.databinding.ActivityMvcCommentBinding
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.ui.comments.PopulatePostDetails.populatePostDetailsInCommentActivity
 import com.gentlekboy.weeknine_jsonplaceholderapi.firstImplementation.utils.ConnectivityLiveData
 import com.gentlekboy.weeknine_jsonplaceholderapi.secondImplementation.model.adapter.MvcCommentAdapter
@@ -27,7 +28,7 @@ import kotlin.properties.Delegates
 
 class MvcCommentActivity : AppCompatActivity() {
     private lateinit var connectivityLiveData: ConnectivityLiveData
-    private lateinit var binding: ActivityCommentBinding
+    private lateinit var binding: ActivityMvcCommentBinding
     private lateinit var commentAdapter: MvcCommentAdapter
     private lateinit var inputMethodManager: InputMethodManager
     private lateinit var listOfComments: ArrayList<MvcCommentsItem>
@@ -42,7 +43,7 @@ class MvcCommentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCommentBinding.inflate(layoutInflater)
+        binding = ActivityMvcCommentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //Initialize required variables
@@ -92,7 +93,6 @@ class MvcCommentActivity : AppCompatActivity() {
         super.onBackPressed()
 
         startActivity(Intent(this, MvcPostActivity::class.java))
-        finish()
     }
 
     //This function gets data from the previous activity using intents
@@ -232,9 +232,12 @@ class MvcCommentActivity : AppCompatActivity() {
                     fetchComments()
                 }
                 false -> {
-                    binding.button.visibility = View.GONE
-                    binding.addCommentSection.visibility = View.GONE
                     binding.nestedScrollview.visibility = View.GONE
+                    binding.cardViewComment.visibility = View.GONE
+                    binding.addComment.visibility = View.GONE
+                    binding.postCommentButton.visibility = View.GONE
+                    binding.button.visibility = View.GONE
+
                     Log.d("GKB", "observeNetworkState: Network Unavailable")
                     Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
                 }
@@ -262,14 +265,17 @@ class MvcCommentActivity : AppCompatActivity() {
 
     //This function hides starting views and displays main layouts
     private fun displayAppLayouts(){
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
             if (listOfComments.isNotEmpty()){
                 binding.progressBar.visibility = View.GONE
                 binding.loadingComments.visibility = View.GONE
-                binding.button.visibility = View.VISIBLE
-                binding.addCommentSection.visibility = View.VISIBLE
+
                 binding.nestedScrollview.visibility = View.VISIBLE
+                binding.cardViewComment.visibility = View.VISIBLE
+                binding.addComment.visibility = View.VISIBLE
+                binding.postCommentButton.visibility = View.VISIBLE
+                binding.button.visibility = View.VISIBLE
             }
         }, 100)
     }

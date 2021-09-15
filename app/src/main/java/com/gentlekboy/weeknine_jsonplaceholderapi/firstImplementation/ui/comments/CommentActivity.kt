@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -241,7 +242,9 @@ class CommentActivity : AppCompatActivity() {
                 }
                 false -> {
                     binding.nestedScrollview.visibility = View.GONE
-                    binding.addCommentSection.visibility = View.GONE
+                    binding.cardViewComment.visibility = View.GONE
+                    binding.addComment.visibility = View.GONE
+                    binding.postCommentButton.visibility = View.GONE
                     binding.button.visibility = View.GONE
 
                     Log.d("GKB", "observeNetworkState: Network Unavailable")
@@ -273,16 +276,18 @@ class CommentActivity : AppCompatActivity() {
 
     //This function hides starting views and displays main layouts
     private fun displayAppLayouts(){
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
             if (listOfComments.isNotEmpty()){
                 binding.nestedScrollview.visibility = View.VISIBLE
-                binding.addCommentSection.visibility = View.VISIBLE
+                binding.cardViewComment.visibility = View.VISIBLE
+                binding.addComment.visibility = View.VISIBLE
+                binding.postCommentButton.visibility = View.VISIBLE
                 binding.button.visibility = View.VISIBLE
 
                 binding.progressBar.visibility = View.GONE
                 binding.loadingComments.visibility = View.GONE
             }
-        }, 500)
+        }, 100)
     }
 }

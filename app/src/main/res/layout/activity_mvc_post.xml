@@ -128,65 +128,96 @@
                 android:layout_marginStart="12dp"
                 android:text="@string/what_do_you_want_to_talk_about"
                 android:textSize="16sp"
+                android:textColor="@color/gray"
                 app:layout_constraintBottom_toBottomOf="@+id/view"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toTopOf="@+id/view" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                style="@style/LinearLayoutButtons"
+            <View
+                android:id="@+id/top_border_view"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
                 android:layout_marginTop="8dp"
-                android:paddingVertical="5dp"
+                android:background="#EDEDED"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_image_card">
+                app:layout_constraintTop_toBottomOf="@+id/profile_image_card" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/live_button"
-                    style="@style/Button"
-                    android:fontFamily="@font/dosis_medium"
-                    android:text="@string/live"
-                    android:textColor="@color/black"
-                    app:backgroundTint="@color/white"
-                    app:icon="@drawable/ic_baseline_videocam_24"
-                    app:iconGravity="textStart"
-                    app:iconTint="@color/gray" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/live_button"
+                style="@style/Button"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:fontFamily="@font/dosis_medium"
+                android:text="@string/live"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/white"
+                app:icon="@drawable/ic_baseline_videocam_24"
+                app:iconGravity="textStart"
+                app:iconTint="@color/gray"
+                app:layout_constraintEnd_toStartOf="@+id/post_photo_button"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_border_view" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/post_photo_button"
-                    style="@style/Button"
-                    android:fontFamily="@font/dosis_medium"
-                    android:text="@string/photo"
-                    android:textColor="@color/black"
-                    app:backgroundTint="@color/white"
-                    app:icon="@drawable/ic_baseline_add_photo_alternate_24"
-                    app:iconGravity="textStart"
-                    app:iconTint="@color/gray" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/post_photo_button"
+                style="@style/Button"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:fontFamily="@font/dosis_medium"
+                android:text="@string/photo"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/white"
+                app:icon="@drawable/ic_baseline_add_photo_alternate_24"
+                app:iconGravity="textStart"
+                app:iconTint="@color/gray"
+                app:layout_constraintEnd_toStartOf="@+id/create_room_button"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/live_button"
+                app:layout_constraintTop_toTopOf="@+id/live_button" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/create_room_button"
-                    style="@style/Button"
-                    android:fontFamily="@font/dosis_medium"
-                    android:text="@string/room"
-                    android:textColor="@color/black"
-                    app:backgroundTint="@color/white"
-                    app:icon="@drawable/ic_baseline_video_call_24"
-                    app:iconGravity="textStart"
-                    app:iconTint="@color/gray" />
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/create_room_button"
+                style="@style/Button"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:fontFamily="@font/dosis_medium"
+                android:text="@string/room"
+                android:textColor="@color/black"
+                app:backgroundTint="@color/white"
+                app:icon="@drawable/ic_baseline_video_call_24"
+                app:iconGravity="textStart"
+                app:iconTint="@color/gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/post_photo_button"
+                app:layout_constraintTop_toTopOf="@+id/post_photo_button" />
+
+            <View
+                android:id="@+id/bottom_border_view"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="#EDEDED"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/live_button" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/post_recyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/dark_gray"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/bottom_border_view" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
