@@ -90,6 +90,7 @@ class CommentActivity : AppCompatActivity() {
             addNewComment()
         }
 
+        fetchComments()
         observeNetworkChanges()
         populatePostDetailsInCommentActivity(binding.postBody, postBody, userId, binding.profileImage, binding.profileName, binding.profileBio, this)
     }
@@ -236,22 +237,45 @@ class CommentActivity : AppCompatActivity() {
         connectivityLiveData.observe(this, { isAvailable ->
             when(isAvailable){
                 true -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.loadingComments.visibility = View.VISIBLE
-                    fetchComments()
+                    displayUiWhenNetworkIsAvailable()
+                    displayAppLayouts()
                 }
                 false -> {
-                    binding.nestedScrollview.visibility = View.GONE
-                    binding.cardViewComment.visibility = View.GONE
-                    binding.addComment.visibility = View.GONE
-                    binding.postCommentButton.visibility = View.GONE
-                    binding.button.visibility = View.GONE
-
-                    Log.d("GKB", "observeNetworkState: Network Unavailable")
-                    Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
+                    displayUiWhenNetworkIsNotAvailable()
                 }
             }
         })
+    }
+
+    private fun displayUiWhenNetworkIsAvailable(){
+        binding.reloadMessage.visibility = View.GONE
+        binding.connectionLostImage.setColorFilter(resources.getColor(R.color.blue))
+        binding.connectionLostText.text = getString(R.string.connection_restored)
+
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            binding.progressBar.visibility = View.VISIBLE
+            binding.loadingComments.visibility = View.VISIBLE
+            binding.connectionLostImage.visibility = View.GONE
+            binding.connectionLostText.visibility = View.GONE
+        }, 800)
+    }
+
+    private fun displayUiWhenNetworkIsNotAvailable(){
+        binding.connectionLostImage.setColorFilter(resources.getColor(R.color.gray))
+        binding.connectionLostText.text = getString(R.string.connection_lost)
+
+        binding.nestedScrollview.visibility = View.GONE
+        binding.cardViewComment.visibility = View.GONE
+        binding.addComment.visibility = View.GONE
+        binding.postCommentButton.visibility = View.GONE
+        binding.button.visibility = View.GONE
+
+        binding.connectionLostImage.visibility = View.VISIBLE
+        binding.connectionLostText.visibility = View.VISIBLE
+        binding.reloadMessage.visibility = View.VISIBLE
+
+        Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show()
     }
 
     private fun fetchComments(){
@@ -288,6 +312,6 @@ class CommentActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
                 binding.loadingComments.visibility = View.GONE
             }
-        }, 100)
+        }, 1500)
     }
 }
